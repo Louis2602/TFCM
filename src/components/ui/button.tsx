@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
 
 import { cn } from '@/lib/utils';
 
@@ -55,4 +56,37 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = 'Button';
 
-export { Button, buttonVariants };
+export interface IconButtonProps extends ButtonProps {
+	tooltip: string;
+}
+
+const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
+	({ tooltip, className, children, ...rest }, ref) => {
+		return (
+			<Tooltip>
+				<TooltipTrigger asChild>
+					<Button
+						variant='ghost'
+						size='icon'
+						{...rest}
+						ref={ref}
+						tabIndex={-1}
+						className={cn(
+							'cursor-pointer bg-background',
+							className
+						)}
+					>
+						<div className='icon-button-icon-wrapper'>
+							{children}
+						</div>
+					</Button>
+				</TooltipTrigger>
+				<TooltipContent>
+					<p>{tooltip}</p>
+				</TooltipContent>
+			</Tooltip>
+		);
+	}
+);
+
+export { Button, buttonVariants, IconButton };

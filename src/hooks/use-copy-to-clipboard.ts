@@ -1,5 +1,6 @@
 'use client';
 
+import { toast } from '@/components/ui/use-toast';
 import * as React from 'react';
 
 export interface useCopyToClipboardProps {
@@ -17,7 +18,9 @@ export function useCopyToClipboard({
 		}
 
 		if (!value) {
-			return;
+			return toast({
+				title: 'Nothing to copy',
+			});
 		}
 
 		navigator.clipboard.writeText(value).then(() => {
