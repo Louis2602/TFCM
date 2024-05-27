@@ -41,6 +41,11 @@ export const dashboardConfig: DashboardConfig = {
 			title: 'Account',
 			links: [
 				{
+					icon: 'database',
+					label: 'Archive',
+					href: '/dashboard/archive',
+				},
+				{
 					icon: 'settings',
 					label: 'Settings',
 					href: '/dashboard/settings',

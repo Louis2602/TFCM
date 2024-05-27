@@ -4,10 +4,13 @@ import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import removeMarkdown from 'markdown-to-text';
 import { Icons } from '@/components/global/icons';
-import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/button';
 import { Hint } from '@/components/global/hint';
 import { MarkdownRenderer } from '@/components/global/markdown';
 import useAppStore from '@/lib/store';
+import { Check, Copy, Download, Save, Trash2 } from 'lucide-react';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
+import { toast } from '@/components/ui/use-toast';
 
 export const OutputBox = () => {
 	const [setShowContent, content, setMarkdown] = useAppStore((state) => [
@@ -15,19 +18,70 @@ export const OutputBox = () => {
 		state.content,
 		state.setMarkdown,
 	]);
+	const { isCopied, copyToClipboard } = useCopyToClipboard({
+		timeout: 2000,
+	});
+
 	const pathname = usePathname();
 	useEffect(() => {
 		setMarkdown('');
 	}, [pathname, setMarkdown]);
 
-	const handleCopyText = () => {
+	const onClear = () => {
+		const text = removeMarkdown(content.markdown);
+		if (!text) {
+			return toast({
+				title: 'Nothing to clear',
+			});
+		}
+
+		setMarkdown('');
+	};
+
+	const onDownload = () => {
+		const fileName = 'content.md';
+		const fileContent = removeMarkdown(content.markdown);
+
+		if (!fileContent) {
+			return toast({
+				title: 'Nothing to download',
+			});
+		}
+		const blob = new Blob([fileContent], { type: 'text/markdown' });
+		const url = URL.createObjectURL(blob);
+
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = fileName;
+
+		document.body.appendChild(link);
+		link.click();
+
+		document.body.removeChild(link);
+		URL.revokeObjectURL(url);
+	};
+
+	const onCopy = () => {
+		if (isCopied) return;
 		const cleanText = removeMarkdown(content.markdown);
-		navigator.clipboard.writeText(cleanText);
+		copyToClipboard(cleanText);
 	};
 
 	const handleFullscreen = () => {
 		if (!content.markdown) return null;
 		setShowContent(true);
+	};
+
+	const onSave = async () => {
+		const fileContent = removeMarkdown(content.markdown);
+
+		if (!fileContent) {
+			return toast({
+				title: 'Nothing to save',
+			});
+		}
+
+
 	};
 
 	return (
@@ -46,7 +100,25 @@ export const OutputBox = () => {
 						/>
 					</Hint>
 				</div>
-				<Button onClick={handleCopyText}>Copy text</Button>
+				<div className='flex gap-x-2'>
+					<IconButton tooltip='Clear'>
+						<Trash2 className='h-4 w-4' onClick={onClear} />
+					</IconButton>
+					<IconButton tooltip='Download' onClick={onDownload}>
+						<Download className='h-4 w-4' />
+					</IconButton>
+					<IconButton tooltip='Save'>
+						<Save className='h-4 w-4' onClick={onSave} />
+					</IconButton>
+					<IconButton tooltip='Copy' onClick={onCopy}>
+						{isCopied ? (
+							<Check className='h-4 w-4' />
+						) : (
+							<Copy className='h-4 w-4' />
+						)}
+						<span className='sr-only'>Copy content</span>
+					</IconButton>
+				</div>
 			</div>
 		</div>
 	);

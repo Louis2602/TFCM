@@ -8,6 +8,7 @@ import {
 	timestamp,
 	text,
 	pgEnum,
+	uuid,
 } from 'drizzle-orm/pg-core';
 
 export const account = pgTable(
@@ -61,6 +62,19 @@ export const prompt = pgTable(
 		createdAt: timestamp('created_at').notNull().defaultNow(),
 	},
 	(prompt) => ({
-		userIdIdx: index('user_id_idx').on(prompt.userId),
+		userIdIdx: index('prompt_user_id_idx').on(prompt.userId),
+	})
+);
+
+export const content = pgTable(
+	'content',
+	{
+		id: uuid('id').defaultRandom().primaryKey().notNull(),
+		userId: varchar('user_id', { length: 191 }).notNull(),
+		body: text('content').notNull(),
+		createdAt: timestamp('created_at').notNull().defaultNow(),
+	},
+	(content) => ({
+		userIdIdx: index('content_user_id_idx').on(content.userId),
 	})
 );

@@ -8,6 +8,13 @@
       "when": 1716772319796,
       "tag": "0000_burly_shotgun",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1716816725311,
+      "tag": "0001_colorful_thunderbolts",
+      "breakpoints": true
     }
   ]
 }

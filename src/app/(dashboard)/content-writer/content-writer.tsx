@@ -72,10 +72,6 @@ export const ContentWriter = () => {
 			});
 		},
 		onFinish() {
-			toast({
-				title: 'Generating done',
-				description: 'Your content has been generated successfully',
-			});
 			router.refresh();
 		},
 	});
@@ -121,14 +117,25 @@ export const ContentWriter = () => {
 
 		const outlines = getOutlinesWithValue(formData.outline);
 
-		const prompts = [
-			`You are writing the article with the title of "${formData.title}" and the SEO keywords "${formData.keywords}", in a ${formData.tone} writing tone. Write intro for this article and then follow the upcoming prompts.`,
-			...outlines,
-		];
+		const prompts = `\
+			You are writing the article with the title of "${
+				formData.title
+			}" and the SEO keywords are "${formData.keywords}", in a ${
+			formData.tone
+		} writing tone. First, write an intro for this article and then, write detailed content for each of these outlines: ${outlines.join(
+			', '
+		)}
+		`;
 
-		for (let i = 0; i < prompts.length; i++) {
-			await complete(prompts[i]);
-		}
+		await complete(prompts, {
+			body: {
+				price,
+			},
+		});
+		toast({
+			title: 'Congratulations 🎉',
+			description: 'Your content has been generated successfully',
+		});
 	};
 
 	return (

@@ -16,11 +16,9 @@ export async function POST(req: Request): Promise<Response> {
 			return new Response('Unathorized', { status: 403 });
 		}
 
-		let { prompt: content } = await req.json();
+		let { prompt: content, price } = await req.json();
 
 		content = content.replace(/\/$/, '').slice(-5000) as string;
-
-		const price = 1;
 
 		if (currentUser.credits < price) {
 			return new Response('Not enough credits to perform this action.', {
@@ -33,10 +31,42 @@ export async function POST(req: Request): Promise<Response> {
 			messages: [
 				{
 					role: 'system',
-					content:
-						'You are an AI writing assistant that writes articles based on provided SEO keywords, article titles, article outlines, and writing tone.' +
-						'Format your responses in Markdown format, to actually look like an article and always finish responses with new line break.' +
-						'Limit your response to no more than 190 words, but make sure to construct complete sentences.',
+					content: `\
+					You are a profresstion content writer that responsible for writing articles based on provided SEO keywords, article titles, article outlines, and writing tone.
+					Your responses must be in Markdown format.
+					Here is an example for the content format:
+
+					=====================================
+
+					# Title of Your Document
+
+					## Introduction
+
+					Write your introduction here. This section should provide an overview of the topic and set the stage for what the reader can expect in the rest of the document. You might include background information, the purpose of the document, and a brief summary of the main points.
+
+					## Outline 1
+
+    				- Brief description of what this section will cover.
+    				- Key points or subtopics to be discussed.
+
+					## Outline 2
+
+    				- Brief description of what this section will cover.
+    				- Key points or subtopics to be discussed.
+
+					## Outline 3
+
+    				- Brief description of what this section will cover.
+    				- Key points or subtopics to be discussed.
+
+					## Conclusion
+
+					(Optional) A brief conclusion summarizing the main points covered in the document and any final thoughts or calls to action.
+
+					=====================================
+
+					Limit your response to no more than 190 words, but make sure to construct complete sentences.
+					`,
 				},
 				{
 					role: 'user',
