@@ -1,8 +1,15 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
+Install all npm packages:
+```bash
+npm install
+```
+
+## Development
+
+To get `*.env` file, contact `ttlam.dev@gmail.com`. Do not leak, share or spam any of these api keys, because it is charged money.
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -14,23 +21,32 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run the ngrok server to run webhook for login:
+```bash
+ngrok http 3000 --domain safely-brave-lynx.ngrok-free.app
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Note that this ngrok server is free, so that it can only be run by 1 person. 
+Try to create your account first, then it won't be needed to run ngrok server
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+If you want to create any new schemas for the database, create it in `src/db/schema.ts`
 
-## Learn More
+Remember, after create or modify a schema, must generate a migration script and push it to the database to update
 
-To learn more about Next.js, take a look at the following resources:
+Generate migration script:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run generate
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Push migration script:
+```bash
+npm run push
+```
 
-## Deploy on Vercel
+Run Drizzle Studio to view the database:
+```bash
+npm run studio
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+For more commands, take a look in `package.json` file and in the drizzle-orm documentation pages.
