@@ -80,7 +80,8 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
         <CommandItem
           onSelect={() => {
             if (editor) {
-              const text = getPrevText(editor, { chars: 5000 });
+              const pos = editor.state.selection.from;
+              const text = getPrevText(editor, pos);
               onSelect(text, "continue");
             }
           }}
