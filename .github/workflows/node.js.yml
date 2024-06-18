@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "development" ]
   pull_request:
     branches: [ "master" ]
 
@@ -27,7 +27,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     
-    - run: npm run dev
+    - run: |
+        cd 02_Source/01_Source Code/TFCM
+        npm run dev
   
     - name: Send email          
       if: ${{ failure() }}
