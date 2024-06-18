@@ -3,8 +3,8 @@ import { eq, sql } from "drizzle-orm";
 import { getCurrentUser } from "@/lib/session";
 import { db } from "@/db/database";
 import { prompt, user } from "@/db/schema";
-import { OpenAIStream, StreamingTextResponse } from "ai";
-import openai from "@/lib/openai";
+import { CoreMessage, streamText } from "ai";
+import { openai } from "@ai-sdk/openai";
 
 export const runtime = "edge";
 
@@ -25,13 +25,10 @@ export async function POST(req: Request): Promise<Response> {
         status: 403,
       });
     }
-
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: `\
+    const messages = [
+      {
+        role: "system",
+        content: `\
 					You are a profresstion content writer that responsible for writing articles based on provided SEO keywords, article titles, article outlines, and writing tone.
 					Your responses must be in Markdown format.
 					Here is an example for the content format:
@@ -67,20 +64,21 @@ export async function POST(req: Request): Promise<Response> {
 
 					Limit your response to no more than 190 words, but make sure to construct complete sentences.
 					`,
-        },
-        {
-          role: "user",
-          content,
-        },
-      ],
-      temperature: 0.7,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-      n: 1,
-      stream: true,
-    });
+      },
+      {
+        role: "user",
+        content,
+      },
+    ] as CoreMessage[];
 
+    const result = await streamText({
+      model: openai("gpt-3.5-turbo"),
+      messages,
+      temperature: 0.7,
+      topP: 1,
+      frequencyPenalty: 0,
+      presencePenalty: 0,
+    });
     await db.transaction(async (tx) => {
       await tx
         .update(user)
@@ -97,9 +95,8 @@ export async function POST(req: Request): Promise<Response> {
       });
     });
 
-    const stream = OpenAIStream(response);
-
-    return new StreamingTextResponse(stream);
+    // Respond with the stream
+    return result.toAIStreamResponse();
   } catch (error) {
     return new Response(`Something went wrong: ${error}`, { status: 500 });
   }
