@@ -1,10 +1,10 @@
 import { createId } from "@paralleldrive/cuid2";
 import { eq, sql } from "drizzle-orm";
-import { getCurrentUser } from "@/lib/session";
 import { db } from "@/db/database";
 import { prompt, user } from "@/db/schema";
 import { CoreMessage, streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { getCurrentUser } from "@/lib/lucia";
 
 export const runtime = "edge";
 

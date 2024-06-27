@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/lib/session";
 import { UserProfile } from "@/components/dashboard/account/user-profile";
 import { MobileNavigation } from "@/components/dashboard/navigation";
 import { Navigation } from "@/components/dashboard/navigation";
 import { Icons } from "@/components/global/icons";
 import { FullscreenContent } from "@/components/dashboard/fullscreen-content";
 import { Hint } from "@/components/global/hint";
+import { getCurrentUser } from "@/lib/lucia";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

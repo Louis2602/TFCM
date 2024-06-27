@@ -1,80 +1,80 @@
-import { sql } from 'drizzle-orm';
+import { sql } from "drizzle-orm";
 import {
-	pgTable,
-	varchar,
-	json,
-	index,
-	integer,
-	timestamp,
-	text,
-	pgEnum,
-	uuid,
-} from 'drizzle-orm/pg-core';
-
-export const account = pgTable(
-	'account',
-	{
-		id: varchar('id', { length: 191 }).notNull().primaryKey(),
-		userId: varchar('user_id', { length: 191 }).notNull().unique(),
-		attributes: json('attributes').notNull(),
-	},
-	(account) => ({
-		userIdx: index('user_idx').on(account.userId),
-	})
-);
+  pgTable,
+  varchar,
+  index,
+  integer,
+  timestamp,
+  text,
+  pgEnum,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable(
-	'user',
-	{
-		id: varchar('id', { length: 191 }).notNull().primaryKey(),
-		accountId: varchar('account_id', { length: 191 }).notNull().unique(),
-		email: varchar('email', { length: 191 }).notNull().unique(),
-		imageUrl: text('image_url'),
-		credits: integer('credits').default(30).notNull(),
-		firstName: varchar('first_name', { length: 191 }),
-		lastName: varchar('last_name', { length: 191 }),
-		createdAt: timestamp('created_at').notNull().defaultNow(),
-		updatedAt: timestamp('updated_at')
-			.notNull()
-			.defaultNow()
-			.$onUpdate(() => sql`CURRENT_TIMESTAMP`),
-	},
-	(user) => ({
-		emailIdx: index('email_idx').on(user.email),
-	})
+  "user",
+  {
+    id: varchar("id", { length: 191 }).notNull().primaryKey(),
+    email: varchar("email", { length: 255 }).notNull().unique(),
+    name: varchar("name", { length: 255 }),
+    password: text("password").notNull(),
+    picture: text("picture"),
+    credits: integer("credits").default(30).notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at")
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
+  },
+  (user) => ({
+    emailIdx: index("email_idx").on(user.email),
+  }),
 );
 
-export const serviceEnum = pgEnum('service', [
-	'grammar',
-	'content',
-	'paraphrase',
-	'seo',
-	'summarize',
+export const session = pgTable("session", {
+  id: varchar("id", { length: 191 }).notNull().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
+  expiresAt: timestamp("expires_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
+
+export const serviceEnum = pgEnum("service", [
+  "grammar",
+  "content",
+  "paraphrase",
+  "seo",
+  "summarize",
 ]);
 
 export const prompt = pgTable(
-	'prompt',
-	{
-		id: varchar('id', { length: 191 }).notNull().primaryKey(),
-		userId: varchar('user_id', { length: 191 }).notNull(),
-		service: serviceEnum('service'),
-		price: integer('price').notNull(),
-		createdAt: timestamp('created_at').notNull().defaultNow(),
-	},
-	(prompt) => ({
-		userIdIdx: index('prompt_user_id_idx').on(prompt.userId),
-	})
+  "prompt",
+  {
+    id: varchar("id", { length: 191 }).notNull().primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    service: serviceEnum("service"),
+    price: integer("price").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (prompt) => ({
+    userIdIdx: index("prompt_user_id_idx").on(prompt.userId),
+  }),
 );
 
 export const content = pgTable(
-	'content',
-	{
-		id: uuid('id').defaultRandom().primaryKey().notNull(),
-		userId: varchar('user_id', { length: 191 }).notNull(),
-		body: text('content').notNull(),
-		createdAt: timestamp('created_at').notNull().defaultNow(),
-	},
-	(content) => ({
-		userIdIdx: index('content_user_id_idx').on(content.userId),
-	})
+  "content",
+  {
+    id: varchar("id", { length: 191 }).notNull().primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    body: text("body").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (content) => ({
+    userIdIdx: index("content_user_id_idx").on(content.userId),
+  }),
 );
