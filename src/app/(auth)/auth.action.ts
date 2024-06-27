@@ -40,7 +40,7 @@ export const signUp = async (values: z.infer<typeof signUpSchema>) => {
     );
 
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
     return { error: `Something went wrong: ${error.message}`, success: false };
   }
 };
@@ -49,7 +49,6 @@ export const signIn = async (values: z.infer<typeof signInSchema>) => {
   const user = await db.query.user.findFirst({
     where: (users, { eq }) => eq(users.email, values.email),
   });
-  console.log(user);
   if (!user || !user.password) {
     return { success: false, error: "Invalid Credentials!" };
   }
@@ -76,5 +75,5 @@ export const signOut = async () => {
     sessionCookie.value,
     sessionCookie.attributes,
   );
-  return redirect("/authenticate");
+  return redirect("/sign-in");
 };
