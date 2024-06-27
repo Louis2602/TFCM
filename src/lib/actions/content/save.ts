@@ -4,6 +4,7 @@ import { db } from "@/db/database";
 import { revalidatePath } from "next/cache";
 import { content as contentTable } from "@/db/schema";
 import { getCurrentUser } from "@/lib/lucia";
+import { createId } from "@paralleldrive/cuid2";
 
 export async function save(body: string) {
   try {
@@ -14,6 +15,7 @@ export async function save(body: string) {
     }
 
     await db.insert(contentTable).values({
+      id: createId(),
       userId: user.id,
       body,
     });
