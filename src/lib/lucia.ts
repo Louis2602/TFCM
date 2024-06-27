@@ -47,7 +47,7 @@ export const getCurrentUser = async () => {
   const [userDB] = await db
     .select()
     .from(userTable)
-    .where(eq(userTable.id, user.id!));
+    .where(eq(userTable.id, user?.id!));
 
   return userDB;
 };
