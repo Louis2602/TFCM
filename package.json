@@ -37,7 +37,7 @@
 		"@types/bcryptjs": "^2.4.6",
 		"@uploadthing/react": "^6.6.0",
 		"@vercel/postgres": "^0.8.0",
-		"ai": "^3.1.14",
+		"ai": "^3.2.14",
 		"axios": "^1.7.2",
 		"bcryptjs": "^2.4.3",
 		"class-variance-authority": "^0.7.0",
