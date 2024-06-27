@@ -22,6 +22,7 @@ import { UploadButton } from "@/components/dashboard/account/upload-button";
 import type { User } from "@/types/db";
 import { updateUserImage, updateUserProfile } from "@/lib/actions/user";
 import { Loader } from "@/components/global/loader";
+import { Label } from "@/components/ui/label";
 
 interface UpdateProfileProps {
   currentUser: User;
@@ -31,7 +32,7 @@ type FormData = z.infer<typeof updateProfileSchema>;
 
 export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [profileImageUrl, setProfileImageUrl] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
 
   const form = useForm<FormData>({
     resolver: zodResolver(updateProfileSchema),
@@ -69,7 +70,7 @@ export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
     }
     toast.success(message);
 
-    setProfileImageUrl(url);
+    setProfilePicture(url);
   };
 
   return (
@@ -77,12 +78,12 @@ export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="imageUrl"
+          name="picture"
           render={() => (
             <div className="inline-flex flex-col gap-4">
               <Avatar className="w-20 h-20">
                 <AvatarImage
-                  src={profileImageUrl || currentUser.picture || ""}
+                  src={profilePicture || currentUser.picture || ""}
                   alt={currentUser.name || ""}
                 />
                 <AvatarFallback>
@@ -95,19 +96,10 @@ export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
           )}
         />
         <div className="flex md:items-start flex-col md:flex-row md:justify-between gap-6">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input {...field} value={currentUser.email} disabled />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="w-full">
+            <Label>Email</Label>
+            <Input value={currentUser.email || ""} disabled className="mt-2" />
+          </div>
           <FormField
             control={form.control}
             name="name"
@@ -115,7 +107,7 @@ export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
               <FormItem className="w-full">
                 <FormLabel>Full name</FormLabel>
                 <FormControl>
-                  <Input {...field} value={currentUser.name} />
+                  <Input {...field} value={currentUser.name || ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

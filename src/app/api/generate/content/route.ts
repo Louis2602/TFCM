@@ -2,7 +2,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { eq, sql } from "drizzle-orm";
 import { db } from "@/db/database";
 import { prompt, user } from "@/db/schema";
-import { CoreMessage, streamText } from "ai";
+import { CoreMessage, streamText, LanguageModel } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { getCurrentUser } from "@/lib/lucia";
 
@@ -88,7 +88,7 @@ export async function POST(req: Request): Promise<Response> {
     });
 
     const result = await streamText({
-      model: openai("gpt-3.5-turbo"),
+      model: openai("gpt-3.5-turbo") as LanguageModel,
       messages,
       temperature: 0.7,
       topP: 1,
