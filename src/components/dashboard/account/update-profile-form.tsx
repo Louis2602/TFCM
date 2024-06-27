@@ -98,7 +98,7 @@ export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
         <div className="flex md:items-start flex-col md:flex-row md:justify-between gap-6">
           <div className="w-full">
             <Label>Email</Label>
-            <Input value={currentUser.email} disabled className="mt-2" />
+            <Input value={currentUser.email || ""} disabled className="mt-2" />
           </div>
           <FormField
             control={form.control}
@@ -107,7 +107,7 @@ export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
               <FormItem className="w-full">
                 <FormLabel>Full name</FormLabel>
                 <FormControl>
-                  <Input {...field} value={currentUser.name} />
+                  <Input {...field} value={currentUser.name || ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
