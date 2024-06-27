@@ -10,8 +10,8 @@ import { MarkdownRenderer } from "@/components/global/markdown";
 import useAppStore from "@/lib/store";
 import { Check, Copy, Download, Save, Trash2 } from "lucide-react";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { toast } from "@/components/ui/use-toast";
 import { save } from "@/lib/actions/content/save";
+import { toast } from "sonner";
 
 export const OutputBox = () => {
   const [setShowContent, content, setMarkdown] = useAppStore((state) => [
@@ -30,15 +30,11 @@ export const OutputBox = () => {
 
   const onClear = () => {
     if (!content.markdown) {
-      return toast({
-        title: "Nothing to clear",
-      });
+      return toast.info("Nothing to clear");
     }
 
     setMarkdown("");
-    toast({
-      title: "Content is cleared",
-    });
+    toast.success("Content is cleared");
   };
 
   const onDownload = () => {
@@ -46,9 +42,7 @@ export const OutputBox = () => {
     const fileContent = content.markdown;
 
     if (!fileContent) {
-      return toast({
-        title: "Nothing to download",
-      });
+      return toast.info("Nothing to download");
     }
     const blob = new Blob([fileContent], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
@@ -62,18 +56,16 @@ export const OutputBox = () => {
 
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    toast({
-      title: "Content is downloaded",
-    });
+    toast.success("Content is downloaded");
   };
 
   const onCopy = () => {
-    if (isCopied) return;
+    if (isCopied || !content.markdown) {
+      return toast.info("Nothing to copy");
+    }
     const cleanText = removeMarkdown(content.markdown);
     copyToClipboard(cleanText);
-    toast({
-      title: "Content is copy to clipboard",
-    });
+    toast.success("Content is copy to clipboard");
   };
 
   const handleFullscreen = () => {
@@ -85,25 +77,21 @@ export const OutputBox = () => {
     const fileContent = content.markdown;
 
     if (!fileContent) {
-      return toast({
-        title: "Nothing to save",
-      });
+      return toast.info("Nothing to save");
     }
     const { success, message } = await save(fileContent);
     if (!success) {
-      toast({
-        title: "Oops, an error has occured",
+      toast.error("Oops, an error has occured", {
         description: message,
       });
     }
-    toast({
-      title: "Save to archive",
+    toast.success("Save to archive", {
       description: message,
     });
   };
 
   return (
-    <div className="border border-border/50 rounded-lg w-full max-md:min-h-[30rem] max-h-[52rem] flex flex-col overflow-hidden">
+    <div className="border rounded-lg w-full max-md:min-h-[30rem] max-h-[52rem] flex flex-col overflow-hidden">
       <div className="h-full px-3 py-2 text-sm overflow-auto">
         <MarkdownRenderer>{content.markdown}</MarkdownRenderer>
       </div>
