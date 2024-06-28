@@ -33,9 +33,13 @@ import {
   NotebookPen,
   ArrowUpWideNarrow,
   RefreshCcwDot,
+  Image,
+  Text,
 } from "lucide-react";
 
 export const Icons = {
+  template: Text,
+  media: Image,
   refresh: RefreshCcwDot,
   notebook: NotebookPen,
   arrowWideNarrow: ArrowUpWideNarrow,
