@@ -49,7 +49,7 @@ const getOutlinesWithValue = (outlines: Outline): string[] => {
   }
 };
 
-export const ContentWriter = () => {
+export const ContentGenerator = () => {
   const { setMarkdown } = useAppStore();
   const [price, setPrice] = useState(0);
 
@@ -139,7 +139,7 @@ export const ContentWriter = () => {
       <div className="w-full h-full flex flex-col">
         <div className="flex flex-col">
           <div className="mb-4 pb-4 border-b border-border/50">
-            <h2 className="font-heading text-3xl">Content Writer</h2>
+            <h2 className="font-heading text-3xl">Content Generator</h2>
             <p className="text-muted-foreground">
               Generate cutting-edge content in less than a minute.
             </p>
