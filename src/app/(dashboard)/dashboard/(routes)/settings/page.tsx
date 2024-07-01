@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { UpdateProfileForm } from "@/components/dashboard/account/update-profile-form";
 import type { Metadata } from "next";
 import { getCurrentUser } from "@/lib/lucia";
+import { AppearanceForm } from "@/components/dashboard/settings/appearance-form";
 
 export const metadata: Metadata = {
   title: "Settings",
@@ -19,8 +20,9 @@ export default async function SettingsPage() {
         <p className="text-muted-foreground">Manage your account settings.</p>
       </div>
       <div className="flex md:flex-row flex-col">
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col gap-4">
           <UpdateProfileForm currentUser={currentUser} />
+          <AppearanceForm />
         </div>
         <div className="flex-1" />
       </div>

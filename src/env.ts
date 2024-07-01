@@ -9,7 +9,6 @@ export const env = createEnv({
     UPLOADTHING_SECRET: z.string().min(1),
     UPLOADTHING_APP_ID: z.string().min(1),
     APP_URL: z.string().url(),
-    WEBHOOK_SECRET: z.string().min(1),
   },
   client: {},
   runtimeEnv: {
@@ -19,6 +18,5 @@ export const env = createEnv({
     UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
     UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
     APP_URL: process.env.APP_URL,
-    WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
   },
 });
