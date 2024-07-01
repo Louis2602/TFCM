@@ -69,32 +69,33 @@ Your code needs to be in a Git repository on GitHub, GitLab, or Bitbucket.
 
 1. **Initialize a Git repository** (if you haven’t already).
 
-    ```bash
-    git init
-    ```
+   ```bash
+   git init
+   ```
 
 2. **Add your files to the repository**.
 
-    ```bash
-    git add .
-    ```
+   ```bash
+   git add .
+   ```
 
 3. **Commit your changes**.
 
-    ```bash
-    git commit -m "Initial commit"
-    ```
+   ```bash
+   git commit -m "Initial commit"
+   ```
 
 4. **Add the remote repository**.
 
-    ```bash
-    git remote add origin <your-repository-url>
-    ```
+   ```bash
+   git remote add origin <your-repository-url>
+   ```
 
 5. **Push your code to the repository**.
-    ```bash
-    git push -u origin main
-    ```
+
+   ```bash
+   git push -u origin main
+   ```
 
 ### Step 3: Connect Your Repository to Vercel
 
@@ -102,26 +103,21 @@ Your code needs to be in a Git repository on GitHub, GitLab, or Bitbucket.
 
 2. **Import Project**:
 
-    - Click on the “New Project” button on your dashboard.
-    - Select the Git provider where your repository is hosted (GitHub, GitLab, or Bitbucket).
-    - Authorize Vercel to access your repositories if prompted.
+   - Click on the “New Project” button on your dashboard.
+   - Select the Git provider where your repository is hosted (GitHub, GitLab, or Bitbucket).
+   - Authorize Vercel to access your repositories if prompted.
 
 3. **Select Repository**: Choose the repository containing your Next.js app.
 
 4. **Configure Project**:
 
-    - Ensure the project name and root directory are correct.
-    - Vercel will automatically detect it’s a Next.js project and apply the appropriate settings.
+   - Ensure the project name and root directory are correct.
+   - Vercel will automatically detect it’s a Next.js project and apply the appropriate settings.
 
 5. **Environment Variables**: If your application requires environment variables, add them in the "Environment Variables" section.
 
 ```bash
 NODE_ENV=development
-
-# AUTH - Clerk
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-WEBHOOK_SECRET=
 
 # OpenAI
 OPENAI_API_KEY=
@@ -133,11 +129,6 @@ UPLOADTHING_APP_ID=
 APP_URL="http://localhost:3000"
 
 POSTGRES_URL=
-
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
 
 # Stripe
 STRIPE_API_KEY=
@@ -160,12 +151,12 @@ If you have a custom domain, you can configure it in Vercel:
 
 1. **Add Domain**:
 
-    - Go to the “Domains” tab in your project settings.
-    - Click on “Add Domain” and enter your custom domain.
+   - Go to the “Domains” tab in your project settings.
+   - Click on “Add Domain” and enter your custom domain.
 
 2. **Update DNS Settings**:
 
-    - Update your domain's DNS settings to point to Vercel. This usually involves adding an A record or CNAME record as instructed by Vercel.
+   - Update your domain's DNS settings to point to Vercel. This usually involves adding an A record or CNAME record as instructed by Vercel.
 
 3. **Verify Domain**: Once DNS settings are updated, click on “Verify” in Vercel to confirm the domain setup.
 
@@ -175,8 +166,8 @@ For continuous deployment, you can configure Vercel to automatically deploy your
 
 1. **Branch Settings**:
 
-    - Go to the “Git” tab in your project settings.
-    - Ensure the main branch is selected for automatic deployments.
+   - Go to the “Git” tab in your project settings.
+   - Ensure the main branch is selected for automatic deployments.
 
 2. **Deploy Hooks** (Optional):
-    - You can set up deploy hooks to trigger deployments from other sources or scripts.
+   - You can set up deploy hooks to trigger deployments from other sources or scripts.
