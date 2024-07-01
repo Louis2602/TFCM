@@ -2,11 +2,16 @@
 
 import { signOut } from "@/app/(auth)/auth.action";
 import { Icons } from "@/components/global/icons";
+import { toast } from "sonner";
 
 export const SignOutButton = () => {
+  const onClick = () => {
+    signOut();
+    toast.success("See you again!");
+  };
   return (
     <button
-      onClick={() => signOut()}
+      onClick={onClick}
       className="group flex items-center gap-3 sm:gap-2 px-2 py-1 rounded-md hover:bg-border transition-colors duration-100 text-primary cursor-pointer"
     >
       <Icons.logout className="group-hover:text-primary sm:h-4 sm:w-4" />
