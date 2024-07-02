@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { UploadButton } from "@/components/dashboard/account/upload-button";
 import type { User } from "@/types/db";
-import { updateUserImage, updateUserProfile } from "@/lib/actions/user";
+import { updateUserProfile } from "@/lib/actions/user";
 import { Loader } from "@/components/global/loader";
 import { Label } from "@/components/ui/label";
 
@@ -32,20 +32,24 @@ type FormData = z.infer<typeof updateProfileSchema>;
 
 export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [profilePicture, setProfilePicture] = useState("");
+  const [profilePicture, setProfilePicture] = useState(
+    currentUser.picture || "",
+  );
 
   const form = useForm<FormData>({
     resolver: zodResolver(updateProfileSchema),
     mode: "onSubmit",
+    defaultValues: {
+      name: currentUser.name || "",
+      picture: profilePicture,
+    },
   });
 
   const onSubmit = async (formData: FormData) => {
-    const formValues = form.getValues();
-    const allValuesFalsy = Object.values(formValues).every((value) => !value);
-
-    if (allValuesFalsy) return null;
-
     setIsLoading(true);
+    if (profilePicture) {
+      formData.picture = profilePicture;
+    }
 
     const { success, message } = await updateUserProfile(formData);
 
@@ -61,15 +65,6 @@ export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
   };
 
   const onUploadComplete = async (url: string) => {
-    const { success, message } = await updateUserImage(url);
-
-    if (!success) {
-      return toast.error("Profile image not updated", {
-        description: message,
-      });
-    }
-    toast.success(message);
-
     setProfilePicture(url);
   };
 
@@ -79,12 +74,13 @@ export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
         <FormField
           control={form.control}
           name="picture"
-          render={() => (
+          render={({ field }) => (
             <div className="inline-flex flex-col gap-4">
               <Avatar className="w-20 h-20">
                 <AvatarImage
-                  src={profilePicture || currentUser.picture || ""}
+                  src={profilePicture}
                   alt={currentUser.name || ""}
+                  {...field}
                 />
                 <AvatarFallback>
                   {generateFallback(`${currentUser.name}`)}
@@ -107,7 +103,7 @@ export const UpdateProfileForm = ({ currentUser }: UpdateProfileProps) => {
               <FormItem className="w-full">
                 <FormLabel>Full name</FormLabel>
                 <FormControl>
-                  <Input {...field} value={currentUser.name || ""} />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

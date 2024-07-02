@@ -30,6 +30,11 @@ export const dashboardConfig: DashboardConfig = {
           label: "Templates",
           href: "/templates",
         },
+        {
+          icon: "kanban",
+          label: "Ideas board",
+          href: "/ideas-board",
+        },
       ],
     },
     {
