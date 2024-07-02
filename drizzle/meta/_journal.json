@@ -8,6 +8,48 @@
       "when": 1716772319796,
       "tag": "0000_burly_shotgun",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1716816725311,
+      "tag": "0001_colorful_thunderbolts",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1719499834529,
+      "tag": "0002_first_typhoid_mary",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1719500678165,
+      "tag": "0003_stale_lady_mastermind",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1719500761325,
+      "tag": "0004_solid_george_stacy",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1719505386409,
+      "tag": "0005_slippery_vance_astro",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1719505473978,
+      "tag": "0006_dapper_leech",
+      "breakpoints": true
     }
   ]
 }

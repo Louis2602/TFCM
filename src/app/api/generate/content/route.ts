@@ -1,76 +1,104 @@
-import { createId } from '@paralleldrive/cuid2';
-import { eq, sql } from 'drizzle-orm';
-import { getCurrentUser } from '@/lib/session';
-import { db } from '@/db/database';
-import { prompt, user } from '@/db/schema';
-import { OpenAIStream, StreamingTextResponse } from 'ai';
-import openai from '@/lib/openai';
+import { createId } from "@paralleldrive/cuid2";
+import { eq, sql } from "drizzle-orm";
+import { db } from "@/db/database";
+import { prompt, user } from "@/db/schema";
+import { CoreMessage, streamText, LanguageModel } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { getCurrentUser } from "@/lib/lucia";
 
-export const runtime = 'edge';
+export const runtime = "edge";
 
 export async function POST(req: Request): Promise<Response> {
-	try {
-		const currentUser = await getCurrentUser();
+  try {
+    const currentUser = await getCurrentUser();
 
-		if (!currentUser) {
-			return new Response('Unathorized', { status: 403 });
-		}
+    if (!currentUser) {
+      return new Response("Unathorized", { status: 403 });
+    }
 
-		let { prompt: content } = await req.json();
+    let { prompt: content, price } = await req.json();
 
-		content = content.replace(/\/$/, '').slice(-5000) as string;
+    content = content.replace(/\/$/, "").slice(-5000) as string;
 
-		const price = 1;
+    if (currentUser.credits < price) {
+      return new Response("Not enough credits to perform this action.", {
+        status: 403,
+      });
+    }
+    const messages = [
+      {
+        role: "system",
+        content: `\
+					You are a profresstion content writer that responsible for writing articles based on provided SEO keywords, article titles, article outlines, and writing tone.
+					Your responses must be in Markdown format.
+					Here is an example for the content format:
 
-		if (currentUser.credits < price) {
-			return new Response('Not enough credits to perform this action.', {
-				status: 403,
-			});
-		}
+					=====================================
 
-		const response = await openai.createChatCompletion({
-			model: 'gpt-3.5-turbo',
-			messages: [
-				{
-					role: 'system',
-					content:
-						'You are an AI writing assistant that writes articles based on provided SEO keywords, article titles, article outlines, and writing tone.' +
-						'Format your responses in Markdown format, to actually look like an article and always finish responses with new line break.' +
-						'Limit your response to no more than 190 words, but make sure to construct complete sentences.',
-				},
-				{
-					role: 'user',
-					content,
-				},
-			],
-			temperature: 0.7,
-			top_p: 1,
-			frequency_penalty: 0,
-			presence_penalty: 0,
-			n: 1,
-			stream: true,
-		});
+					# Title of Your Document
 
-		await db.transaction(async (tx) => {
-			await tx
-				.update(user)
-				.set({
-					credits: sql`${user.credits} - ${price}`,
-					updatedAt: new Date(),
-				})
-				.where(eq(user.id, currentUser.id));
-			await tx.insert(prompt).values({
-				id: createId(),
-				userId: currentUser.id,
-				price,
-				service: 'content',
-			});
-		});
+					## Introduction
 
-		const stream = OpenAIStream(response);
+					Write your introduction here. This section should provide an overview of the topic and set the stage for what the reader can expect in the rest of the document. You might include background information, the purpose of the document, and a brief summary of the main points.
 
-		return new StreamingTextResponse(stream);
-	} catch (error) {
-		return new Response(`Something went wrong: ${error}`, { status: 500 });
-	}
+					## Outline 1
+
+    				- Brief description of what this section will cover.
+    				- Key points or subtopics to be discussed.
+
+					## Outline 2
+
+    				- Brief description of what this section will cover.
+    				- Key points or subtopics to be discussed.
+
+					## Outline 3
+
+    				- Brief description of what this section will cover.
+    				- Key points or subtopics to be discussed.
+
+					## Conclusion
+
+					(Optional) A brief conclusion summarizing the main points covered in the document and any final thoughts or calls to action.
+
+					=====================================
+
+					Limit your response to no more than 190 words, but make sure to construct complete sentences.
+					`,
+      },
+      {
+        role: "user",
+        content,
+      },
+    ] as CoreMessage[];
+
+    await db.transaction(async (tx) => {
+      await tx
+        .update(user)
+        .set({
+          credits: sql`${user.credits} - ${price}`,
+          updatedAt: new Date(),
+        })
+        .where(eq(user.id, currentUser.id));
+      await tx.insert(prompt).values({
+        id: createId(),
+        userId: currentUser.id,
+        price,
+        service: "content",
+      });
+    });
+
+    const result = await streamText({
+      model: openai("gpt-3.5-turbo") as LanguageModel,
+      messages,
+      temperature: 0.7,
+      topP: 1,
+      frequencyPenalty: 0,
+      presencePenalty: 0,
+    });
+
+    // Respond with the stream
+    return result.toAIStreamResponse();
+  } catch (error) {
+    return new Response(`Something went wrong: ${error}`, { status: 500 });
+  }
 }

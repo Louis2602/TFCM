@@ -1,71 +1,45 @@
-'use server';
+"use server";
 
-import { db } from '@/db/database';
-import { user as userTable } from '@/db/schema';
-import { eq } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
-import { updateProfileSchema } from '../validations/profile';
-import { currentUser } from '@clerk/nextjs/server';
-import { z } from 'zod';
-
-export async function updateUserImage(imageUrl: string) {
-	try {
-		const user = await currentUser();
-
-		if (!user) {
-			throw new Error('Unauthorized');
-		}
-
-		const updateData = {
-			imageUrl,
-			updatedAt: new Date(),
-		};
-
-		await db
-			.update(userTable)
-			.set(updateData)
-			.where(eq(userTable.id, user.id));
-
-		revalidatePath(`/dashboard/settings`);
-
-		return {
-			success: true,
-			message: `Update profile image successfully`,
-		};
-	} catch (error) {
-		return { success: false, message: `Something went wrong: ${error}` };
-	}
-}
+import { db } from "@/db/database";
+import { user as userTable } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { updateProfileSchema } from "../validations/profile";
+import { z } from "zod";
+import { getCurrentUser } from "../lucia";
+import { del } from "@vercel/blob";
 
 export async function updateUserProfile(
-	formData: z.infer<typeof updateProfileSchema>
+  formData: z.infer<typeof updateProfileSchema>,
 ) {
-	try {
-		const user = await currentUser();
+  try {
+    const user = await getCurrentUser();
 
-		if (!user) {
-			throw new Error('Unauthorized');
-		}
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
 
-		const data = updateProfileSchema.parse(formData);
+    const data = updateProfileSchema.parse(formData);
 
-		const updateData = {
-			...data,
-			updatedAt: new Date(),
-		};
-		await db
-			.update(userTable)
-			.set(updateData)
-			.where(eq(userTable.id, user.id));
+    const updateData = {
+      ...data,
+      updatedAt: new Date(),
+    };
 
-		revalidatePath(`/dashboard/settings`);
+    if (user.picture) {
+      await del(user.picture);
+    }
 
-		return { success: true, message: `Update profile successfully` };
-	} catch (error) {
-		if (error instanceof z.ZodError) {
-			return { success: false, message: JSON.stringify(error.issues) };
-		}
+    await db.update(userTable).set(updateData).where(eq(userTable.id, user.id));
 
-		return { success: false, message: `Something went wrong: ${error}` };
-	}
+    revalidatePath(`/dashboard/settings`);
+
+    return { success: true, message: `Update profile successfully` };
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return { success: false, message: JSON.stringify(error.issues) };
+    }
+
+    return { success: false, message: `Something went wrong: ${error}` };
+  }
 }
