@@ -35,9 +35,11 @@ import {
   RefreshCcwDot,
   Image,
   Text,
+  Kanban,
 } from "lucide-react";
 
 export const Icons = {
+  kanban: Kanban,
   template: Text,
   media: Image,
   refresh: RefreshCcwDot,
