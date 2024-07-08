@@ -71,6 +71,7 @@ export const content = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id),
+    title: text("title").notNull(),
     body: text("body").notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },

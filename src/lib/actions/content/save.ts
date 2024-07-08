@@ -17,6 +17,7 @@ export async function save(body: string) {
     await db.insert(contentTable).values({
       id: createId(),
       userId: user.id,
+      title: createId(),
       body,
     });
 
