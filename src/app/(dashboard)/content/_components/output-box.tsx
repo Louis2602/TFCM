@@ -1,19 +1,20 @@
-"use client";
+'use client';
 
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
-import removeMarkdown from "markdown-to-text";
-import { Icons } from "@/components/global/icons";
-import { IconButton } from "@/components/ui/button";
-import { Hint } from "@/components/global/hint";
-import { MarkdownRenderer } from "@/components/global/markdown";
-import useAppStore from "@/lib/store";
-import { Check, Copy, Download, Save, Trash2 } from "lucide-react";
-import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { save } from "@/lib/actions/content/save";
-import { toast } from "sonner";
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import removeMarkdown from 'markdown-to-text';
+import { Icons } from '@/components/global/icons';
+import { IconButton } from '@/components/ui/button';
+import { Hint } from '@/components/global/hint';
+import { MarkdownRenderer } from '@/components/global/markdown';
+import useAppStore from '@/lib/store';
+import { Check, Copy, Download, PencilLine, Save, Trash2 } from 'lucide-react';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
+import { save } from '@/lib/actions/content/save';
+import { toast } from 'sonner';
 
 export const OutputBox = () => {
+  const router = useRouter();
   const [setShowContent, content, setMarkdown] = useAppStore((state) => [
     state.setShowContent,
     state.content,
@@ -25,29 +26,29 @@ export const OutputBox = () => {
 
   const pathname = usePathname();
   useEffect(() => {
-    setMarkdown("");
+    setMarkdown('');
   }, [pathname, setMarkdown]);
 
   const onClear = () => {
     if (!content.markdown) {
-      return toast.info("Nothing to clear");
+      return toast.info('Nothing to clear');
     }
 
-    setMarkdown("");
-    toast.success("Content is cleared");
+    setMarkdown('');
+    toast.success('Content is cleared');
   };
 
   const onDownload = () => {
-    const fileName = "content.md";
+    const fileName = 'content.md';
     const fileContent = content.markdown;
 
     if (!fileContent) {
-      return toast.info("Nothing to download");
+      return toast.info('Nothing to download');
     }
-    const blob = new Blob([fileContent], { type: "text/markdown" });
+    const blob = new Blob([fileContent], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
 
@@ -56,16 +57,22 @@ export const OutputBox = () => {
 
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    toast.success("Content is downloaded");
+    toast.success('Content is downloaded');
   };
 
   const onCopy = () => {
     if (isCopied || !content.markdown) {
-      return toast.info("Nothing to copy");
+      return toast.info('Nothing to copy');
     }
     const cleanText = removeMarkdown(content.markdown);
     copyToClipboard(cleanText);
-    toast.success("Content is copy to clipboard");
+    toast.success('Content is copy to clipboard');
+  };
+
+  const onEdit = async () => {
+    if (!content.markdown) return null;
+    window.localStorage.setItem('content', content.markdown);
+    router?.push('/editor?initContent=true');
   };
 
   const handleFullscreen = () => {
@@ -77,15 +84,15 @@ export const OutputBox = () => {
     const fileContent = content.markdown;
 
     if (!fileContent) {
-      return toast.info("Nothing to save");
+      return toast.info('Nothing to save');
     }
     const { success, message } = await save(fileContent);
     if (!success) {
-      toast.error("Oops, an error has occured", {
+      toast.error('Oops, an error has occured', {
         description: message,
       });
     }
-    toast.success("Save to archive", {
+    toast.success('Save to archive', {
       description: message,
     });
   };
@@ -123,6 +130,9 @@ export const OutputBox = () => {
               <Copy className="h-4 w-4" />
             )}
             <span className="sr-only">Copy content</span>
+          </IconButton>
+          <IconButton tooltip="Edit">
+            <PencilLine className="h-4 w-4" onClick={onEdit} />
           </IconButton>
         </div>
       </div>

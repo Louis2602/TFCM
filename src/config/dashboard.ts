@@ -16,6 +16,11 @@ export const dashboardConfig: DashboardConfig = {
           href: "/content",
         },
         {
+          icon: "pen",
+          label: "Editor",
+          href: "/editor",
+        },
+        {
           icon: "media",
           label: "Media",
           href: "/media",
