@@ -44,22 +44,27 @@ const Editor = ({ initContent = {}, className }: EditorProps) => {
   const [openLink, setOpenLink] = useState(false);
   const [openAI, setOpenAI] = useState(false);
   const [content, setContent] = useState<JSONContent>(initContent);
+  const [contentMD, setContentMD] = useState(
+    window.localStorage.getItem('content')
+  );
 
   const debouncedUpdates = useDebounceCallback(
     async (editor: EditorInstance) => {
       const json = editor.getJSON();
       const contentJson = JSON.stringify(json);
-      // const markdownOutput = editor.storage.markdown.getMarkdown();
-
+      const markdownOutput = editor.storage.markdown.getMarkdown();
       window.localStorage.setItem('novel-content', contentJson);
       setContent(json);
+      setContentMD(markdownOutput);
       setSaveStatus('Saved');
     },
-    500
+    1000
   );
 
-  const handleSaveContent = async (content: string) => {
-    const { success, message } = await save(content);
+  const handleSaveContent = async () => {
+    const { success, message } = await save(
+      String(contentMD).replace(/\n/g, '\\n')
+    );
     if (!success) {
       toast.error('Oops, an error has occured', {
         description: message,
@@ -140,9 +145,7 @@ const Editor = ({ initContent = {}, className }: EditorProps) => {
         </ScrollArea>
       </EditorRoot>
 
-      <Button onClick={() => handleSaveContent(JSON.stringify(content))}>
-        Save
-      </Button>
+      <Button onClick={() => handleSaveContent()}>Save</Button>
     </div>
   );
 };
