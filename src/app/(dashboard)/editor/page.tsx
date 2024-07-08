@@ -2,6 +2,7 @@
 
 import Editor from '@/components/editor/editor';
 import { useSearchParams } from 'next/navigation';
+import { JSONContent } from 'novel';
 import React from 'react';
 
 const EditorPage = () => {
@@ -19,7 +20,10 @@ const EditorPage = () => {
 
       <Editor
         initContent={
-          initContent ? (window.localStorage.getItem('content') as json) : {}
+          initContent
+            ? ((window.localStorage.getItem('content') ??
+                '') as unknown as JSONContent)
+            : {}
         }
       />
     </>
