@@ -36,9 +36,11 @@ import {
   Image,
   Text,
   Kanban,
+  Link,
 } from "lucide-react";
 
 export const Icons = {
+  link: Link,
   kanban: Kanban,
   template: Text,
   media: Image,

@@ -56,6 +56,11 @@ export const dashboardConfig: DashboardConfig = {
           href: "/dashboard/settings",
         },
         {
+          icon: "link",
+          label: "Shared Links",
+          href: "/dashboard/shared-links",
+        },
+        {
           icon: "receipt",
           label: "Credits",
           href: "/dashboard/credits",

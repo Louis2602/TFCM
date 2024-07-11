@@ -50,6 +50,13 @@
       "when": 1719505473978,
       "tag": "0006_dapper_leech",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1720717869752,
+      "tag": "0007_zippy_quasar",
+      "breakpoints": true
     }
   ]
 }
