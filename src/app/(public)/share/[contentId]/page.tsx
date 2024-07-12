@@ -5,8 +5,9 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import Unauthorized from './_components/unauthorized';
 import Error from './_components/error';
+import styles from './styles/shared-page.module.css'
 
-export default function SharedPage({ params }: any) {
+export default function SharedContent({ params }: any) {
     const router = useRouter();
     const { contentId } = params;
     const [content, setContent] = useState<any>(null);
@@ -15,7 +16,7 @@ export default function SharedPage({ params }: any) {
     useEffect(() => {
         const fetchContent = async () => {
             try {
-                const response = await fetch(`/api/data/shared/${contentId}`);
+                const response = await fetch(`/api/share/data/${contentId}`);
                 if (!response.ok) {
                     if (response.status === 401) {
                         setError('Unauthorized'); // Change to set an appropriate error message
@@ -58,12 +59,18 @@ export default function SharedPage({ params }: any) {
     }
 
     if (!content) {
-        return <div>Loading...</div>;
+        return(
+            <>
+                <div className='flex h-screen w-screen justify-center items-center'>
+                    <div>Loading...</div>
+                </div>
+            </>
+        );
     }
 
     return (
-        <div className="h-full w-full">
-            <div dangerouslySetInnerHTML={{ __html: content.body }} />
+        <div className="h-screen w-screen flex justify-center p-5 pt-28">
+            <div className={`max-w-[768px] ${styles.content}`} dangerouslySetInnerHTML={{ __html: content.body }} />
         </div>
     );
 }
