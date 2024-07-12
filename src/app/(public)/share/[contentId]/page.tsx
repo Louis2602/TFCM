@@ -16,7 +16,7 @@ export default function SharedContent({ params }: any) {
     useEffect(() => {
         const fetchContent = async () => {
             try {
-                const response = await fetch(`/api/share/data/${contentId}`);
+                const response = await fetch(`/api/share/${contentId}`);
                 if (!response.ok) {
                     if (response.status === 401) {
                         setError('Unauthorized'); // Change to set an appropriate error message
