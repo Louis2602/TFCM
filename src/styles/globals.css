@@ -75,6 +75,24 @@ body {
   }
 }
 
+.kanbanCard{
+  opacity: 0.3;
+  background-color: #575757;
+  height: 100px;
+  min-height: 100px;
+  cursor: grab;
+  text-align: left;
+  align-items: center;
+  padding: 2.5px;
+}
+
+.kanbanCol{
+  background-color: #390341;
+  width: 350px;
+  height: 500px;
+  max-height: 500px;
+}
+
 .dotPattern {
   background-image: radial-gradient(
     rgb(75, 0, 130) 1px,
