@@ -64,10 +64,7 @@ export const prompt = pgTable(
   }),
 );
 
-export const stateEnum = pgEnum("state", [
-  "private",
-  "public"
-]);
+export const stateEnum = pgEnum("state", ["private", "public"]);
 
 export const content = pgTable(
   "content",
@@ -78,7 +75,7 @@ export const content = pgTable(
       .references(() => user.id),
     title: text("title").notNull(),
     body: text("body").notNull(),
-    state: stateEnum("state").default('private').notNull(),
+    state: stateEnum("state").default("private").notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (content) => ({
