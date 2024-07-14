@@ -1,13 +1,12 @@
-'use client';
+"use client";
 
-import Editor from '@/components/editor/editor';
-import { useSearchParams } from 'next/navigation';
-import { JSONContent } from 'novel';
-import React from 'react';
+import Editor from "@/components/editor/editor";
+import { useSearchParams } from "next/navigation";
+import { JSONContent } from "novel";
 
 const EditorPage = () => {
   const searchParams = useSearchParams();
-  const initContent = searchParams.get('initContent');
+  const initContent = searchParams.get("initContent");
 
   return (
     <>
@@ -21,8 +20,8 @@ const EditorPage = () => {
       <Editor
         initContent={
           initContent
-            ? ((window.localStorage.getItem('content') ??
-                '') as unknown as JSONContent)
+            ? ((window.localStorage.getItem("content") ??
+                "") as unknown as JSONContent)
             : {}
         }
       />

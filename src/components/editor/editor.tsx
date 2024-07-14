@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useDebounceCallback } from 'usehooks-ts';
+import React, { useState } from "react";
+import { useDebounceCallback } from "usehooks-ts";
 import {
   EditorRoot,
   EditorCommand,
@@ -11,24 +11,25 @@ import {
   type JSONContent,
   EditorInstance,
   EditorCommandList,
-} from 'novel';
-import { ImageResizer, handleCommandNavigation } from 'novel/extensions';
-import { defaultExtensions } from './extensions';
-import { Separator } from '@/components/ui/separator';
-import { NodeSelector } from './selectors/node-selector';
-import { LinkSelector } from './selectors/link-selector';
-import { ColorSelector } from './selectors/color-selector';
-import { TextButtons } from './selectors/text-buttons';
-import { slashCommand, suggestionItems } from './slash-command';
-import { handleImageDrop, handleImagePaste } from 'novel/plugins';
-import { uploadFn } from './image-upload';
-import AIMenuSwitch from './ai/ai-menu-switch';
-import { Markdown } from 'tiptap-markdown';
-import { ScrollArea } from '../ui/scroll-area';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { save } from '@/lib/actions/content/save';
-import { toast } from 'sonner';
+} from "novel";
+import { ImageResizer, handleCommandNavigation } from "novel/extensions";
+import { defaultExtensions } from "./extensions";
+import { Separator } from "@/components/ui/separator";
+import { NodeSelector } from "./selectors/node-selector";
+import { LinkSelector } from "./selectors/link-selector";
+import { ColorSelector } from "./selectors/color-selector";
+import { TextButtons } from "./selectors/text-buttons";
+import { slashCommand, suggestionItems } from "./slash-command";
+import { handleImageDrop, handleImagePaste } from "novel/plugins";
+import { uploadFn } from "./image-upload";
+import AIMenuSwitch from "./ai/ai-menu-switch";
+import { Markdown } from "tiptap-markdown";
+import { ScrollArea } from "../ui/scroll-area";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { save } from "@/lib/actions/content/save";
+import { toast } from "sonner";
+import { Loader } from "../global/loader";
 
 const extensions = [...defaultExtensions, slashCommand, Markdown];
 
@@ -38,14 +39,15 @@ interface EditorProps {
 }
 
 const Editor = ({ initContent = {}, className }: EditorProps) => {
-  const [saveStatus, setSaveStatus] = useState('Saved');
+  const [saveStatus, setSaveStatus] = useState("Saved");
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
   const [openAI, setOpenAI] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [content, setContent] = useState<JSONContent>(initContent);
   const [contentMD, setContentMD] = useState(
-    window.localStorage.getItem('content')
+    window.localStorage.getItem("content"),
   );
 
   const debouncedUpdates = useDebounceCallback(
@@ -53,30 +55,41 @@ const Editor = ({ initContent = {}, className }: EditorProps) => {
       const json = editor.getJSON();
       const contentJson = JSON.stringify(json);
       const markdownOutput = editor.storage.markdown.getMarkdown();
-      window.localStorage.setItem('novel-content', contentJson);
+      window.localStorage.setItem("novel-content", contentJson);
       setContent(json);
       setContentMD(markdownOutput);
-      setSaveStatus('Saved');
+      setSaveStatus("Saved");
     },
-    1000
+    1000,
   );
 
   const handleSaveContent = async () => {
+    if (!contentMD || contentMD.length === 0) {
+      toast.error("No content to save", {
+        description: "Try to create some new content",
+      });
+      return;
+    }
+    setLoading(true);
     const { success, message } = await save(
-      String(contentMD).replace(/\n/g, '\\n')
+      String(contentMD).replace(/\n/g, "\\n"),
     );
     if (!success) {
-      toast.error('Oops, an error has occured', {
+      toast.error("Oops, an error has occured", {
         description: message,
       });
+      setLoading(false);
+      return;
     }
-    toast.success('Save to archive', {
+    toast.success("Content is saved to archive", {
       description: message,
     });
+    setLoading(false);
+    setContentMD("");
   };
 
   return (
-    <div className={cn('relative w-full h-full', className)}>
+    <div className={cn("relative w-full h-full", className)}>
       <div className="absolute right-5 top-5 z-10 mb-5 rounded-lg bg-accent px-2 py-1 text-sm text-muted-foreground">
         {saveStatus}
       </div>
@@ -101,7 +114,7 @@ const Editor = ({ initContent = {}, className }: EditorProps) => {
             }}
             onUpdate={({ editor }: any) => {
               debouncedUpdates(editor);
-              setSaveStatus('Unsaved');
+              setSaveStatus("Unsaved");
             }}
             slotAfter={<ImageResizer />}
           >
@@ -145,7 +158,14 @@ const Editor = ({ initContent = {}, className }: EditorProps) => {
         </ScrollArea>
       </EditorRoot>
 
-      <Button onClick={() => handleSaveContent()}>Save</Button>
+      <Button
+        className="mt-4 float-end w-[120px]"
+        onClick={handleSaveContent}
+        disabled={loading}
+      >
+        {loading && <Loader className="h-4 w-4 mr-2" />}
+        Save
+      </Button>
     </div>
   );
 };

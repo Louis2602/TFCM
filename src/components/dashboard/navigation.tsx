@@ -38,7 +38,7 @@ export const Navigation = ({ onNavLinkClick }: NavigationProps) => {
                   href={link.href}
                   key={link.label}
                   className={cn(
-                    "group flex items-center gap-3 sm:gap-2 px-2 py-1 rounded-md hover:bg-border hover:text-primary transition-colors duration-100 cursor-pointer",
+                    "group flex items-center gap-3 sm:gap-2 p-2 rounded-md hover:bg-border hover:text-primary transition-colors duration-100 cursor-pointer",
                     pathname === link.href && "bg-border text-primary",
                   )}
                   onClick={handleNavLinkClick}

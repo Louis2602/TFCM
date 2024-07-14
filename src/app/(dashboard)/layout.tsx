@@ -22,7 +22,7 @@ export default async function DashboardLayout({
   return (
     <>
       <main className="flex overflow-hidden h-screen w-screen">
-        <aside className="lg:visible lg:relative absolute invisible max-w-[13.75rem] w-full border-r border-border/50 py-3 px-4 flex flex-col gap-5">
+        <aside className="lg:visible lg:relative absolute invisible max-w-[250px] w-full border-r py-3 px-4 flex flex-col gap-5">
           <div className="flex items-center justify-between mb-6 my-3">
             <UserProfile currentUser={currentUser} />
             <Hint label="Buy credits">
@@ -38,7 +38,9 @@ export default async function DashboardLayout({
             <MobileNavigation />
             <UserProfile currentUser={currentUser} />
           </div>
-          <section className="relative p-6 w-full h-full">{children}</section>
+          <section className="relative p-6 w-full h-full overflow-y-auto">
+            {children}
+          </section>
         </div>
       </main>
       <FullscreenContent />
