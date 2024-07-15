@@ -42,10 +42,6 @@ export const content = pgTable("content", {
 	created_at: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	title: text("title").notNull(),
 	state: state("state").default('private').notNull(),
-	outline: text("outline"),
-	seo_keyword: text("seo_keyword"),
-	category_id: varchar("category_id", { length: 191 }).references(() => category.id),
-	updated_at: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 },
 (table) => {
 	return {
@@ -59,15 +55,15 @@ export const session = pgTable("session", {
 	expires_at: timestamp("expires_at", { withTimezone: true, mode: 'string' }).notNull(),
 });
 
-export const category = pgTable("category", {
+export const template = pgTable("template", {
 	id: varchar("id", { length: 191 }).primaryKey().notNull(),
 	user_id: text("user_id").notNull().references(() => user.id),
-	name: varchar("name", { length: 191 }).notNull(),
+	title: text("title").notNull(),
+	body: text("body").notNull(),
 	created_at: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	updated_at: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 },
 (table) => {
 	return {
-		user_id_idx: index("category_user_id_idx").on(table.user_id),
+		user_id_idx: index("template_user_id_idx").on(table.user_id),
 	}
 });
