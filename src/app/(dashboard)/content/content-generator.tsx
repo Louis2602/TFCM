@@ -29,6 +29,8 @@ import {
 import { OutputBox } from "./_components/output-box";
 import useAppStore from "@/lib/store";
 import { toast } from "sonner";
+import { MultiFileDropzone } from "@/components/global/multi-file-dropzone";
+import { Label } from "@/components/ui/label";
 
 type FormData = z.infer<typeof contentWriterFormSchema>;
 
@@ -52,6 +54,7 @@ const getOutlinesWithValue = (outlines: Outline): string[] => {
 export const ContentGenerator = () => {
   const { setMarkdown } = useAppStore();
   const [price, setPrice] = useState(0);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const router = useRouter();
 
@@ -69,6 +72,9 @@ export const ContentGenerator = () => {
       });
     },
     onFinish() {
+      toast.success("Congratulations 🎉", {
+        description: "Your content has been generated successfully",
+      });
       router.refresh();
     },
   });
@@ -111,26 +117,53 @@ export const ContentGenerator = () => {
 
   const onSubmit = async (formData: FormData) => {
     setMarkdown("");
+    let prompts = "";
+
+    const readFileAsText = (file: File) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          if (event.target) {
+            resolve(event.target.result);
+          }
+        };
+        reader.onerror = function (error) {
+          reject(error);
+        };
+        reader.readAsText(file);
+      });
+    };
+
+    if (uploadedFile) {
+      try {
+        const resources = await readFileAsText(uploadedFile);
+        const additionalPrompt = `\
+Here are some resources that you can use as references for your content information to write it more precise:
+-------------------------
+${resources}`;
+        prompts += additionalPrompt;
+      } catch (error) {
+        console.error("Error reading file:", error);
+      }
+    }
 
     const outlines = getOutlinesWithValue(formData.outline);
 
-    const prompts = `\
-			You are writing the article with the title of "${
-        formData.title
-      }" and the SEO keywords are "${formData.keywords}", in a ${
-        formData.tone
-      } writing tone. First, write an intro for this article and then, write detailed content for each of these outlines: ${outlines.join(
-        ", ",
-      )}
-		`;
+    prompts += `\
+-------------------------
+You are writing the article with the title of "${
+      formData.title
+    }" and the SEO keywords are "${formData.keywords}", in a ${
+      formData.tone
+    } writing tone. First, write an intro for this article and then, write detailed content for each of these outlines: ${outlines.join(
+      ", ",
+    )}
+`;
 
     await complete(prompts, {
       body: {
         price,
       },
-    });
-    toast.success("Congratulations 🎉", {
-      description: "Your content has been generated successfully",
     });
   };
 
@@ -244,6 +277,20 @@ export const ContentGenerator = () => {
                     <FormMessage />
                   </FormItem>
                 )}
+              />
+              <Label className="mt-2">Resources</Label>
+              <MultiFileDropzone
+                multiple={false}
+                dropzoneOptions={{
+                  maxFiles: 1,
+                  accept: {
+                    "text/plain": [".txt"],
+                    "text/markdown": [".md"],
+                  },
+                }}
+                className="w-full p-6"
+                onFilesAdded={(files) => setUploadedFile(files[0])}
+                setUploadedFile={setUploadedFile}
               />
               <p className="text-sm flex items-center gap-1">
                 <span>Price: {price + 1}</span>

@@ -9,12 +9,15 @@ export const env = createEnv({
     APP_URL: z.string().url(),
     BLOB_READ_WRITE_TOKEN: z.string().min(1),
   },
-  client: {},
+  client: {
+    NEXT_PUBLIC_APP_URL: z.string().url(),
+  },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     POSTGRES_URL: process.env.POSTGRES_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     APP_URL: process.env.APP_URL,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
   },
 });

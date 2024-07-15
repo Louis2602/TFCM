@@ -1,27 +1,38 @@
-import { Share, Share2 } from 'lucide-react';
+"use client";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { Content } from "@/types/db";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ShareButton from "./share-button";
+import Link from "next/link";
 
 interface DocumentCardProps {
-	data: {
-		title: string;
-		seoKeywords: string;
-		outlines: string;
-	};
+  data: Content;
 }
 
 const DocumentCard = ({ data }: DocumentCardProps) => {
-	return (
-		<div className='relative bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300'>
-			<div className='absolute top-2 right-2 text-primary p-2 rounded-full focus:outline-none cursor-pointer hover:text-primary/75 transition-colors'>
-				<Share2 className='h-5 w-5' />
-			</div>
-			<h2 className='text-2xl font-semibold mb-2'>{data.title}</h2>
-			<p className='text-sm text-gray-500 mb-4'>
-				<span className='font-bold'>SEO Keywords:</span>{' '}
-				{data.seoKeywords}
-			</p>
-			<p>{data.outlines}</p>
-		</div>
-	);
+  return (
+    <Card className="w-[400px] relative">
+      <Link href={`/dashboard/archive/${data.id}`}>
+        <CardHeader>
+          <CardTitle className="truncate w-[300px] hover:text-primary transition-colors">
+            {data.title}
+          </CardTitle>
+        </CardHeader>
+      </Link>
+      <CardContent>
+        <ShareButton contentId={data.id} />
+        <p className="line-clamp-3 text-sm">{data.body}</p>
+      </CardContent>
+    </Card>
+  );
 };
 
 export default DocumentCard;
+
+DocumentCard.Skeleton = function DocumentCardSkeleton() {
+  return (
+    <div className="aspect-[600/400] rounded-lg overflow-hidden">
+      <Skeleton className="h-full w-full" />
+    </div>
+  );
+};
