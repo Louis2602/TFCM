@@ -82,3 +82,19 @@ export const content = pgTable(
     userIdIdx: index("content_user_id_idx").on(content.userId),
   }),
 );
+
+export const template = pgTable(
+  "template",
+  {
+    id: varchar("id", { length: 191 }).notNull().primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    title: text("title").notNull(),
+    body: text("body").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (template) => ({
+    userIdIdx: index("template_user_id_idx").on(template.userId)
+  }),
+);

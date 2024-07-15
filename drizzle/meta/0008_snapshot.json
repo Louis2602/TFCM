@@ -1,54 +1,9 @@
 {
-  "id": "99e80385-4f57-4312-93dc-f854b552bc8f",
-  "prevId": "83af2e63-1a63-4f9c-aaa9-eba930a57b88",
+  "id": "7068feac-3511-40a5-9197-eeee622aa880",
+  "prevId": "8f0ad623-77bc-48bf-953b-4ccb32a06a27",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
-    "public.card_flairs": {
-      "name": "card_flairs",
-      "schema": "",
-      "columns": {
-        "card_id": {
-          "name": "card_id",
-          "type": "varchar(20)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "flair": {
-          "name": "flair",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {
-        "card_tag_idx": {
-          "name": "card_tag_idx",
-          "columns": [
-            "card_id",
-            "flair"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "card_flairs_card_id_kanban_cards_id_fk": {
-          "name": "card_flairs_card_id_kanban_cards_id_fk",
-          "tableFrom": "card_flairs",
-          "tableTo": "kanban_cards",
-          "columnsFrom": [
-            "card_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.content": {
       "name": "content",
       "schema": "",
@@ -117,56 +72,6 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.kanban_cards": {
-      "name": "kanban_cards",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(20)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "column": {
-          "name": "column",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "content": {
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "create_at": {
-          "name": "create_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "update_at": {
-          "name": "update_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "column_index": {
-          "name": "column_index",
-          "columns": [
-            "column"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -262,6 +167,69 @@
         "session_user_id_user_id_fk": {
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.template": {
+      "name": "template",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(191)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "template_user_id_idx": {
+          "name": "template_user_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "template_user_id_user_id_fk": {
+          "name": "template_user_id_user_id_fk",
+          "tableFrom": "template",
           "tableTo": "user",
           "columnsFrom": [
             "user_id"
