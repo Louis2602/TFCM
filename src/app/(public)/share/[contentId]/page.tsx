@@ -1,11 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
-import { remark } from "remark";
-import html from "remark-html";
 import Unauthorized from "./_components/unauthorized";
 import Error from "./_components/error";
 import { MarkdownRenderer } from "@/components/global/markdown";
+import { getContentById } from "@/lib/actions/content/share";
 
 export default function SharedContent({ params }: any) {
   const { contentId } = params;
@@ -13,31 +12,25 @@ export default function SharedContent({ params }: any) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchContent = async () => {
+    async function fetchContent() {
       try {
-        const response = await fetch(`/api/share/${contentId}`);
-        if (!response.ok) {
-          if (response.status === 401) {
-            setError("Unauthorized"); // Change to set an appropriate error message
-          } else if (response.status === 404) {
+        const response = await getContentById(contentId);
+
+        if (!response.success) {
+          if (response.message === "Unauthorized") {
+            setError("Unauthorized");
+          } else if (response.message === "Content not found") {
             setError("Not Found");
           } else {
-            setError("Error fetching content");
+            setError("Error");
           }
-          return;
+        } else {
+          setContent(response.data);
         }
-        const data = await response.json();
-        console.log(data);
-
-        // Process markdown content to HTML
-        const processedContent = await remark().use(html).process(data.body);
-        const contentHtml = processedContent.toString();
-
-        setContent({ ...data, body: contentHtml });
-      } catch (err: any) {
-        setError("Error fetching content");
+      } catch (err) {
+        setError("Error");
       }
-    };
+    }
 
     fetchContent();
   }, [contentId]);
@@ -66,10 +59,12 @@ export default function SharedContent({ params }: any) {
   }
 
   return (
-    <div className="h-screen w-screen flex justify-center p-5 pt-28">
-      {content.body.split("\\n").map((str: string, idx: number) => (
-        <MarkdownRenderer key={idx}>{str + "<br/>"}</MarkdownRenderer>
-      ))}
+    <div className="h-max flex overflow-x-hidden justify-center">
+      <div className="px-5 py-28 max-w-[768px] overflow-hidden">
+        {content.body.split("\\n").map((str: string, idx: number) => (
+          <MarkdownRenderer key={idx}>{str + "<br/>"}</MarkdownRenderer>
+        ))}
+      </div>
     </div>
   );
 }
