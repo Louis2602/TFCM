@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { share } from "@/lib/actions/content/share";
 import { Share2, Clipboard } from "lucide-react";
 import { toast } from "sonner";
@@ -19,40 +18,33 @@ interface ShareButtonProps {
   contentId: string;
 }
 
-async function handleShare(contentId: string) {
-  try {
-    const response = await share(contentId);
-    if (!response.success) {
-      toast.error(response.message);
-      throw new Error(response.message);
-    }
-    toast.success("Link sharing is turned on");
-  } catch (error: any) {
-    toast.error(`Error: ${error.message}`);
-  }
-}
-
-const copyToClipboard = (link: string) => {
-  navigator.clipboard.writeText(link);
-  toast.success("Link copied to clipboard");
-};
-
 export default function ShareButton({ contentId }: ShareButtonProps) {
-  const [link, setLink] = useState<string>(
-    `${env.NEXT_PUBLIC_APP_URL}/share/${contentId}`,
-  );
+  const link = `${env.NEXT_PUBLIC_APP_URL}/share/${contentId}`;
+
+  const copyToClipboard = (link: string) => {
+    navigator.clipboard.writeText(link);
+    toast.success("Link copied to clipboard");
+  };
+
+  const handleShare = async (contentId: string) => {
+    try {
+      const response = await share(contentId);
+      if (!response.success) {
+        toast.error(response.message);
+        throw new Error(response.message);
+      }
+      toast.success("Link sharing is turned on");
+    } catch (error: any) {
+      toast.error(`Error: ${error.message}`);
+    }
+  };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          className="absolute top-2 right-2 text-primary p-2 rounded-full focus:outline-none cursor-pointer hover:text-primary/75 transition-colors"
-          variant="outline"
-          aria-label="Share"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Share2 className="h-5 w-5" />
-        </Button>
+        <div className="absolute top-2 right-2 text-primary p-2 cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+          <Share2 className="h-5 w-5" onClick={(e) => e.stopPropagation()} />
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

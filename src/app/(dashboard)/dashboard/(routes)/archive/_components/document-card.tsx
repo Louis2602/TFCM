@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Content } from "@/types/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,10 +11,12 @@ interface DocumentCardProps {
 
 const DocumentCard = ({ data }: DocumentCardProps) => {
   return (
-    <Card className="w-[400px] relative transition-transform transform hover:scale-105 hover:shadow-lg">
+    <Card className="w-[400px] relative">
       <Link href={`/dashboard/archive/${data.id}`}>
         <CardHeader>
-          <CardTitle className="truncate">{data.title}</CardTitle>
+          <CardTitle className="truncate w-[300px] hover:text-primary transition-colors">
+            {data.title}
+          </CardTitle>
         </CardHeader>
       </Link>
       <CardContent>
