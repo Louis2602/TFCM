@@ -1,5 +1,5 @@
 import { share } from "@/lib/actions/content/share";
-import { Share2, Clipboard } from "lucide-react";
+import { Share2, Copy } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { env } from "@/env";
+import { Label } from "@/components/ui/label";
 
 interface ShareButtonProps {
   contentId: string;
@@ -43,26 +44,30 @@ export default function ShareButton({ contentId }: ShareButtonProps) {
     <Dialog>
       <DialogTrigger asChild>
         <div className="absolute top-2 right-2 text-primary p-2 cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
-          <Share2 className="h-5 w-5" onClick={(e) => e.stopPropagation()} />
+          <Share2 className="h-5 w-5" />
         </div>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="py-5">Share public link</DialogTitle>
           <DialogDescription>
             Your name, custom instructions, and any messages you add after
             sharing stay private.
           </DialogDescription>
-          <DialogDescription>
-            <Input type="text" value={link} readOnly />
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <div className="mr-auto">
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <Label htmlFor="link" className="sr-only">
+                Link
+              </Label>
+              <Input type="text" value={link} readOnly />
+            </div>
             <Button onClick={() => copyToClipboard(link)}>
-              <Clipboard className="h-5 w-5" />
+              <span className="sr-only">Copy</span>
+              <Copy className="h-4 w-4" />
             </Button>
           </div>
+        </DialogHeader>
+        <DialogFooter>
           <Button
             onClick={(e) => {
               e.preventDefault();
