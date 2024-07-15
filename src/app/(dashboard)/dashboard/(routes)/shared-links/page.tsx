@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SharedLinksComponent from "./_components/get-shared-links";
+import SharedLinksCollection from "./_components/shared-links-collection";
 
 export const metadata: Metadata = {
   title: "Shared Links",
@@ -14,7 +14,7 @@ export default function IdeasBoardPage() {
         <p className="text-muted-foreground">Managing your shared links.</p>
       </div>
       <div>
-        <SharedLinksComponent />
+        <SharedLinksCollection />
       </div>
     </>
   );
