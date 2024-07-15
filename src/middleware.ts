@@ -10,8 +10,7 @@ function isPublicRoute(pathname: string) {
   }
 
   // Check if the path starts with "/share/"
-  console.log(pathname)
-  return pathname.startsWith("/share/") || pathname.startsWith("/api/share/");
+  return pathname.startsWith("/share/");
 }
 
 export function middleware(request: NextRequest) {
