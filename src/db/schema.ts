@@ -78,3 +78,28 @@ export const content = pgTable(
     userIdIdx: index("content_user_id_idx").on(content.userId),
   }),
 );
+
+export const kanbanCards = pgTable(
+  "kanban_cards",
+  {
+    id: varchar("id", { length: 20 }).notNull().primaryKey(),
+    column: varchar("column", { length: 255 }).notNull(),
+    content: text("content").notNull(),
+    createAt: timestamp("create_at").notNull().defaultNow(),
+    updateAt: timestamp("update_at").notNull().defaultNow().$onUpdate(() => sql`CURRENT_TIMESTAMP`),
+  },
+  (cards) => ({
+    columnIdx: index("column_index").on(cards.column),
+  }),
+);
+
+export const cardFlairs = pgTable(
+  "card_flairs",
+  {
+    cardId: varchar("card_id", { length: 20 }).notNull().references(() => kanbanCards.id).primaryKey(),
+    flair: varchar("flair", { length: 100 }).notNull().primaryKey(),
+  },
+  (cardFlairs) => ({
+    cardFlairIdx: index("card_tag_idx").on(cardFlairs.cardId, cardFlairs.flair),
+  })
+)

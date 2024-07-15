@@ -1,11 +1,9 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Column, Card } from "@/types/kanban" 
-import PlusIcon from "@/components/ui/plus-icon";
 import KanbanColumn from "@/components/kanban-board/kanban-component/kanban-column";
 import { 
     DndContext,
     DragEndEvent,
-    DragOverEvent,
     DragOverlay,
     DragStartEvent,
     PointerSensor,
@@ -14,7 +12,8 @@ import {
  } from "@dnd-kit/core"
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
-import TaskCard from "@/components/kanban-board/kanban-component/kanban-card";
+import KanbanCard from "@/components/kanban-board/kanban-component/kanban-card";
+import { getCards, addCard, removeCard, updateCardContent, swapCard, addNewFlair, deleteAFlair } from "@/lib/actions/kanban";
 
 const columns: Column[] = [
     {
@@ -35,62 +34,25 @@ const columns: Column[] = [
     }
 ];
 
-const defaultCards: Card[] = [
-    {
-      id: "1",
-      column: "3",
-      content: "List admin APIs for dashboard",
-      tags: ["API", "Dashboard", "Admin"]
-    },
-    {
-      id: "2",
-      column: "1",
-      content:
-        "Develop user registration functionality with OTP delivered on SMS after email confirmation and phone number confirmation",
-        tags: ["Authentication"]
-    },
-    {
-      id: "3",
-      column: "2",
-      content: "Conduct security testing",
-      tags: []
-    },
-    {
-      id: "4",
-      column: "2",
-      content: "Analyze competitors",
-      tags: ["Analysis"]
-    },
-    {
-      id: "5",
-      column: "4",
-      content: "Create UI kit documentation",
-      tags: ["Document", "UI"]
-    },
-    {
-      id: "6",
-      column: "4",
-      content: "Dev meeting",
-      tags: ["Meeting"]
-    },
-    {
-      id: "7",
-      column: "3",
-      content: "Deliver dashboard prototype",
-      tags: ["Prototype", "Dashboard"]
-    },
-    {
-      id: "8",
-      column: "3",
-      content: "Optimize application performance",
-      tags: ["Performance"]
-    },
-]
 
-function kanbanBoard(){
+function KanbanBoard(){
     const colIndex = useMemo(() => columns.map((col) => col.index), [columns]);
     const [activeCard, setActiveCard] = useState<Card | null>(null);
-    const [cards, setCards] = useState(defaultCards);
+    const [cards, setCards] = useState<Card[]>([]);
+
+    useEffect(() => {
+        const fetchCards = async () => {
+            try {
+                const cards = await getCards();
+                setCards(cards);
+            } catch (error) {
+                console.error('Error fetching cards:', error);
+                // Handle error as needed
+            }
+        };
+
+        fetchCards();
+    }, []);
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
@@ -109,16 +71,22 @@ function kanbanBoard(){
         if (!over) return;
 
         if ( active.id !== over.id ){
-            setCards((cards) => {
-                const activeCard = cards.findIndex( (c) => c.id === active.id );
-                const overCard = cards.findIndex( (c) => c.id === over.id )
+            const activeCard = cards.findIndex( (c) => c.id === active.id );
+            const overCard = cards.findIndex( (c) => c.id === over.id )
+            swapCard(cards[activeCard], cards[overCard])
+            .then(() => {
+                setCards((cards) => {
+                    if (cards[activeCard].column != cards[overCard].column){
+                        cards[activeCard].column = cards[overCard].column;
+                        return arrayMove(cards, activeCard, overCard - 1);
+                    }
 
-                if (cards[activeCard].column != cards[overCard].column){
-                    cards[activeCard].column = cards[overCard].column
-                    return arrayMove(cards, activeCard, overCard - 1);
-                }
-
-                return arrayMove(cards, activeCard, overCard);
+                    return arrayMove(cards, activeCard, overCard);
+                });
+            })
+            .catch((error) => {
+                console.error('Error deleting:', error);
+                throw error;
             });
         }
     }
@@ -128,35 +96,69 @@ function kanbanBoard(){
             id: generateId(),
             column: col,
             content: "New Content here",
-            tags: []
+            flairs: []
         }
-
-        setCards([...cards, newCard]);
+        addCard(col, newCard.content)
+        .then(() => {
+            setCards([...cards, newCard]);
+        })
+        .catch((error) => {
+            console.error('Error deleting:', error);
+            throw error;
+        });
     }
 
     function deleteCard(cardID: string){
-        setCards(cards.filter((c) => {c.id !== cardID}))
+        removeCard(cardID)
+        .then(() => {
+            setCards(cards.filter((c) => {c.id !== cardID}));
+        })
+        .catch((error) => {
+            console.error('Error deleting:', error);
+            throw error;
+        });
     }
 
     function updateCard(cardID: string, content: string){
-        setCards(cards.map((card) => {
-            if (card.id !== cardID) return card;
-            return {...card, content};
-        }))
+        updateCardContent(cardID, content)
+        .then(() => {
+          setCards((cards) =>
+            cards.map((card) => {
+              if (card.id !== cardID) return card;
+              return { ...card, content };
+            })
+          );
+        })
+        .catch((error) => {
+          console.error('Error updating card content:', error);
+          throw error;
+        });
     }
 
-    function addFlair(cardID: string, tag: string){
-        setCards(cards.map((card) => {
-            if (card.id !== cardID) return card;
-            return {...card, tags: {...card.tags, tag}};
-        }))
+    function addFlair(cardID: string, flair: string){
+        addNewFlair(cardID, flair).then(() => {
+            setCards(cards.map((card) => {
+                if (card.id !== cardID) return card;
+                return {...card, flairs: {...card.flairs, flair}};
+            }))
+        })
+        .catch((error) => {
+            console.error('Error updating card content:', error);
+            throw error;
+        });
     }
 
-    function removeFlair(cardID: string, tag: string){
-        setCards(cards.map((card) => {
-            if (card.id !== cardID) return card;
-            return {...card, tags: card.tags.filter((tagItem) => tagItem !== tag)};
-        }))
+    function removeFlair(cardID: string, flair: string){
+        deleteAFlair(cardID, flair).then(() => {
+            setCards(cards.map((card) => {
+                if (card.id !== cardID) return card;
+                return {...card, flairs: card.flairs.filter((flairItem) => flairItem !== flair)};
+            }))
+        })
+        .catch((error) => {
+            console.error('Error updating card content:', error);
+            throw error;
+        });
     }
 
     return (
@@ -197,7 +199,7 @@ function kanbanBoard(){
             {createPortal(
                 <DragOverlay>
                     {activeCard && (
-                        <TaskCard
+                        <KanbanCard
                             card={activeCard}
                             deleteCard={deleteCard}
                             updateCard={updateCard}
@@ -218,4 +220,4 @@ function generateId() {
     /* Generate a random number between 0 and 10000 */
     return (Math.floor(Math.random() * 10001)).toString();
   }
-export default kanbanBoard;
+export default KanbanBoard;

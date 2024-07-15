@@ -13,7 +13,7 @@ interface cardPrototype{
     removeFlair: (id: string, flair: string) => void
 }
 
-function TaskCard({ card, deleteCard, updateCard, addFlair, removeFlair }: cardPrototype) {
+function KanbanCard({ card, deleteCard, updateCard, addFlair, removeFlair }: cardPrototype) {
     const [mouseIsOver, setMouseIsOver] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [content, setContent] = useState(card.content);
@@ -106,15 +106,16 @@ function TaskCard({ card, deleteCard, updateCard, addFlair, removeFlair }: cardP
                 if (window.confirm("You have an unsaved change. Do you want to save?") && content){
                   saveContent();
                 } 
-                setContent(card.content);
+                else{
+                  setContent(card.content);
+                }
                 toggleEditMode();
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && e.shiftKey && content){
-                  setContent(card.content);
                   saveContent();
+                  toggleEditMode();
                 }
-                toggleEditMode();
               }}
               onChange={(e) => {
                 setContent(e.target.value);
@@ -149,12 +150,12 @@ function TaskCard({ card, deleteCard, updateCard, addFlair, removeFlair }: cardP
           )}
         </div>
         <div className="mt-2 flex flex-wrap">
-            { card.tags && card.tags.map((tag) => (
-                <div key={tag} className="bg-gray-200 rounded-full px-3 py-1 m-1 flex items-center">
-                <span>{tag}</span>
+            { card.flairs && card.flairs.map((flair) => (
+                <div key={flair} className="bg-gray-200 rounded-full px-3 py-1 m-1 flex items-center">
+                <span>{flair}</span>
                 <button
                   className="ml-2 text-red-500"
-                  onClick={(e) => removeFlair(card.id, tag)}
+                  onClick={(e) => removeFlair(card.id, flair)}
                 >
                   <TrashIcon/>
                 </button>
@@ -193,4 +194,4 @@ function TaskCard({ card, deleteCard, updateCard, addFlair, removeFlair }: cardP
     );
 }
 
-export default TaskCard;
+export default KanbanCard;

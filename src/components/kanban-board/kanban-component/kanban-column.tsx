@@ -3,7 +3,7 @@ import type { Column, Card  } from "@/types/kanban"
 import { useMemo } from "react";
 import PlusIcon from "@/components/ui/plus-icon";
 
-import TaskCard from "./kanban-card";
+import KanbanCard from "./kanban-card";
 
 interface ColumnPrototype{
     col: Column;
@@ -78,7 +78,7 @@ function KanbanColumn({col, cards, createCard, deleteCard, updateCard, addFlair,
             ">
                 <SortableContext items={(cardIDs)}>
                     {cards.map((card) => (
-                        <TaskCard
+                        <KanbanCard
                             key={card.id}
                             card={card}
                             deleteCard={deleteCard}

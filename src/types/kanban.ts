@@ -7,5 +7,5 @@ export type Card = {
     id: string;
     column: string;
     content: string;
-    tags: string[];
+    flairs: string[];
 }
