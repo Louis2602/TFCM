@@ -10,7 +10,7 @@ import {
   ZAP_PROMPT,
 } from "./prompt";
 
-export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request): Promise<Response> {
   /*

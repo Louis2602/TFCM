@@ -6,7 +6,7 @@ import { CoreMessage, streamText, LanguageModel } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { getCurrentUser } from "@/lib/lucia";
 
-export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request): Promise<Response> {
   try {
