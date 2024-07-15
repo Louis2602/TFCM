@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const publicRoutes = ["/sign-in", "/sign-up", "/"];
+const publicRoutes = ["/sign-in", "/sign-up", "/", "/share"];
 
 export function middleware(request: NextRequest) {
   const authCookie = request.cookies.get("tfcm-auth-cookie");
@@ -17,3 +17,4 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
+
