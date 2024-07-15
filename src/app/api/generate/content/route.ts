@@ -30,7 +30,7 @@ export async function POST(req: Request): Promise<Response> {
         role: "system",
         content: `\
 					You are a profresstion content writer that responsible for writing articles based on provided SEO keywords, article titles, article outlines, and writing tone.
-					Your responses must be in Markdown format.
+                    Your main language to write content is English and Vietnamese. Your responses must be in Markdown format.
 					Here is an example for the content format:
 
 					=====================================
@@ -62,7 +62,8 @@ export async function POST(req: Request): Promise<Response> {
 
 					=====================================
 
-					Limit your response to no more than 190 words, but make sure to construct complete sentences.
+					Limit your response to no more than 2000 words, but make sure to construct complete sentences.
+                    Write the content using the language that the user uses to give requirement. 
 					`,
       },
       {
