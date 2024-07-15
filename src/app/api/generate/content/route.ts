@@ -13,7 +13,7 @@ export async function POST(req: Request): Promise<Response> {
     const currentUser = await getCurrentUser();
 
     if (!currentUser) {
-      return new Response("Unathorized", { status: 403 });
+      return new Response("Unauthorized", { status: 403 });
     }
 
     let { prompt: content, price } = await req.json();
@@ -25,46 +25,47 @@ export async function POST(req: Request): Promise<Response> {
         status: 403,
       });
     }
+
     const messages = [
       {
         role: "system",
         content: `\
-					You are a profresstion content writer that responsible for writing articles based on provided SEO keywords, article titles, article outlines, and writing tone.
-                    Your main language to write content is English and Vietnamese. Your responses must be in Markdown format.
-					Here is an example for the content format:
+You are a professional content writer responsible for writing articles based on provided SEO keywords, article titles, article outlines, and writing tone.
+Your main language to write content is English and Vietnamese. Your responses must be in Markdown format.
+Here is an example of the content format:
 
-					=====================================
+=====================================
 
-					# Title of Your Document
+# Title of Your Document
 
-					## Introduction
+## Introduction
 
-					Write your introduction here. This section should provide an overview of the topic and set the stage for what the reader can expect in the rest of the document. You might include background information, the purpose of the document, and a brief summary of the main points.
+Write your introduction here. This section should provide an overview of the topic and set the stage for what the reader can expect in the rest of the document. You might include background information, the purpose of the document, and a brief summary of the main points.
 
-					## Outline 1
+## Outline 1
 
-    				- Brief description of what this section will cover.
-    				- Key points or subtopics to be discussed.
+- Brief description of what this section will cover.
+- Key points or subtopics to be discussed.
 
-					## Outline 2
+## Outline 2
 
-    				- Brief description of what this section will cover.
-    				- Key points or subtopics to be discussed.
+- Brief description of what this section will cover.
+- Key points or subtopics to be discussed.
 
-					## Outline 3
+## Outline 3
 
-    				- Brief description of what this section will cover.
-    				- Key points or subtopics to be discussed.
+- Brief description of what this section will cover.
+- Key points or subtopics to be discussed.
 
-					## Conclusion
+## Conclusion
 
-					(Optional) A brief conclusion summarizing the main points covered in the document and any final thoughts or calls to action.
+(Optional) A brief conclusion summarizing the main points covered in the document and any final thoughts or calls to action.
 
-					=====================================
+=====================================
 
-					Limit your response to no more than 2000 words, but make sure to construct complete sentences.
-                    Write the content using the language that the user uses to give requirement. 
-					`,
+Limit your response to no more than 2000 words, but make sure to construct complete sentences.
+Write the content using the language that the user uses to give requirement.
+        `,
       },
       {
         role: "user",
@@ -99,7 +100,10 @@ export async function POST(req: Request): Promise<Response> {
 
     // Respond with the stream
     return result.toAIStreamResponse();
-  } catch (error) {
-    return new Response(`Something went wrong: ${error}`, { status: 500 });
+  } catch (error: any) {
+    console.error("Error occurred:", error);
+    return new Response(`Something went wrong: ${error.message}`, {
+      status: 500,
+    });
   }
 }
