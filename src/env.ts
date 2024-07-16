@@ -13,7 +13,6 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: z.string().url(),
   },
   runtimeEnv: {
-    NODE_ENV: process.env.NODE_ENV,
     POSTGRES_URL: process.env.POSTGRES_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     APP_URL: process.env.APP_URL,
