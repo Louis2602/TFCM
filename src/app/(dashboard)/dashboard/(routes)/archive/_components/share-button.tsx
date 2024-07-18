@@ -16,10 +16,12 @@ import { env } from "@/env";
 import { Label } from "@/components/ui/label";
 
 interface ShareButtonProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   contentId: string;
 }
 
-export default function ShareButton({ contentId }: ShareButtonProps) {
+export default function ShareButton({ open, onOpenChange, contentId }: ShareButtonProps) {
   const link = `${env.NEXT_PUBLIC_APP_URL}/share/${contentId}`;
 
   const copyToClipboard = (link: string) => {
@@ -39,14 +41,9 @@ export default function ShareButton({ contentId }: ShareButtonProps) {
       toast.error(`Error: ${error.message}`);
     }
   };
-
+ 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div className="absolute top-2 right-2 text-primary p-2 cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
-          <Share2 className="h-5 w-5" />
-        </div>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="py-5">Share public link</DialogTitle>
