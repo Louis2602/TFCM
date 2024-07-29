@@ -8,6 +8,8 @@ export const env = createEnv({
     OPENAI_API_KEY: z.string().min(1),
     APP_URL: z.string().url(),
     BLOB_READ_WRITE_TOKEN: z.string().min(1),
+    GOOGLE_TRENDS_API_KEY: z.string().min(1),
+    GOOGLE_TRENDS_REALTIME_URL: z.string().url(),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url(),
@@ -19,5 +21,7 @@ export const env = createEnv({
     APP_URL: process.env.APP_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
+    GOOGLE_TRENDS_REALTIME_URL: process.env.GOOGLE_TRENDS_REALTIME_URL,
+    GOOGLE_TRENDS_API_KEY: process.env.GOOGLE_TRENDS_API_KEY,
   },
 });
