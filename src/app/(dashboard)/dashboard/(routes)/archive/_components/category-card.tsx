@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Ellipsis, Trash2 } from 'lucide-react';
-import { ConfirmDialog } from './confirm-dialog';
+import { ConfirmDialog } from '../../../../../../components/global/confirm-dialog';
 import { Category } from '@/types/db';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -115,6 +115,8 @@ const CategoryCard = (props: CategoryCardProps) => {
 							}, 100);
 						}}
 						title={'Delete "' + props.data.name + '"?'}
+						variant='destructive'
+						confirmText='Delete'
 						onConfirm={() => {
 							f.onDelete(props.data.id);
 						}}

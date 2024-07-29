@@ -8,7 +8,7 @@ import ShareButton from './share-button';
 import Link from 'next/link';
 
 import { DocumentMoveDialog } from './document-move-dialog';
-import { ConfirmDialog } from './confirm-dialog';
+import { ConfirmDialog } from '../../../../../../components/global/confirm-dialog';
 import { RenameContentForm } from './rename-form';
 import {
 	DropdownMenu,
@@ -117,7 +117,7 @@ const DocumentCard = (props: DocumentCardProps) => {
 				open={renameDialog && !isDropdownOpen}
 				onOpenChange={setRenameDialog}
 				onSubmit={(values) => {
-					props.onRename(props.data.id, values.title);
+					props.onRename(props.data.id, values.name);
 				}}
 			/>
 			<DocumentMoveDialog
