@@ -1,4 +1,6 @@
+import { ResponseData } from '@/types/res';
 import { type ClassValue, clsx } from 'clsx';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -20,3 +22,23 @@ export function generateFallback(str: string) {
 
 export const sleep = (ms: number) =>
 	new Promise((resolve) => setTimeout(resolve, ms));
+
+export const apiWrapper = <T extends ResponseData>(
+	f: () => Promise<T>,
+	onSuccess: (res: T) => void,
+	onError?: () => void
+) => {
+	f()
+		.then((res) => {
+			if (res.success) {
+				onSuccess(res);
+			} else {
+				if (onError) onError();
+				toast.error(res.error);
+			}
+		})
+		.catch((err) => {
+			if (onError) onError();
+			toast.error(err);
+		});
+};

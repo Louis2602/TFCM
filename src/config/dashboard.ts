@@ -37,8 +37,8 @@ export const dashboardConfig: DashboardConfig = {
         },
         {
           icon: "kanban",
-          label: "Ideas board",
-          href: "/ideas-board",
+          label: "Task board",
+          href: "/kanban",
         },
       ],
     },
