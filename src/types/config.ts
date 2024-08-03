@@ -1,22 +1,22 @@
-import { Icons } from '@/components/global/icons';
+import { Icons } from "@/components/global/icons";
 
 interface DashboardNavLink {
-	icon: keyof typeof Icons;
-	href: string;
-	label: string;
+  icon: keyof typeof Icons;
+  href: string;
+  label: string;
 }
 
 interface DashboardNav {
-	title: string;
-	links: DashboardNavLink[];
+  title: string;
+  links: DashboardNavLink[];
 }
 
 export interface DashboardConfig {
-	nav: DashboardNav[];
+  nav: DashboardNav[];
 }
 
 export interface Service {
-	title: string;
-	description: string;
-	icon: keyof typeof Icons;
+  title: string;
+  description: string;
+  icon: keyof typeof Icons;
 }

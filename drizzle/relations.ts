@@ -41,13 +41,13 @@ export const kanban_taskRelations = relations(kanban_task, ({one}) => ({
 		fields: [kanban_task.column_id],
 		references: [kanban_column.id]
 	}),
-	task_board: one(task_board, {
-		fields: [kanban_task.board_id],
-		references: [task_board.id]
-	}),
 	user: one(user, {
 		fields: [kanban_task.assignee],
 		references: [user.id]
+	}),
+	task_board: one(task_board, {
+		fields: [kanban_task.board_id],
+		references: [task_board.id]
 	}),
 }));
 

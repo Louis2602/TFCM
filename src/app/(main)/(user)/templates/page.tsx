@@ -1,10 +1,10 @@
-import CreateTemplate from '@/app/(dashboard)/templates/CreateTemplate';
-import TemplateCardList from '@/app/(dashboard)/templates/TemplateCardList';
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
+import CreateTemplate from "./CreateTemplate";
+import TemplateCardList from "./TemplateCardList";
 
 export const metadata: Metadata = {
-  title: 'Templates',
-  description: 'Create templates for your content.',
+  title: "Templates",
+  description: "Create templates for your content.",
 };
 
 export default function TemplatesPage() {

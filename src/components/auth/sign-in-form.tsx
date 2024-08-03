@@ -40,7 +40,11 @@ export const SignInForm = () => {
     const res = await signIn(values);
     if (res.success) {
       toast.success("Login successful");
-      router.push("/dashboard");
+      if (res.isAdmin) {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/dashboard");
+      }
       setIsLoading(false);
     } else {
       toast.error(res.error);
