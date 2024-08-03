@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+export type Icon = LucideIcon;
 import {
   Menu,
   X,
@@ -38,9 +39,12 @@ import {
   Trash2,
   Kanban,
   Link,
+  User,
+  LucideIcon,
 } from "lucide-react";
 
 export const Icons = {
+  user: User,
   link: Link,
   kanban: Kanban,
   template: Text,

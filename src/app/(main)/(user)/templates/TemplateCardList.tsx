@@ -1,7 +1,7 @@
-import TemplateCard from '@/app/(dashboard)/templates/components/TemplateCard';
-import { Empty } from '@/components/global/empty';
-import { getUserTemplates } from '@/lib/actions/templates/query';
-import React from 'react';
+import TemplateCard from "@/app/(main)/(user)/templates/components/TemplateCard";
+import { Empty } from "@/components/global/empty";
+import { getUserTemplates } from "@/lib/actions/templates/query";
+import React from "react";
 
 const TemplateCardList = async () => {
   const { data: templates, success } = await getUserTemplates();
@@ -20,7 +20,7 @@ const TemplateCardList = async () => {
         <Empty label="No contents found" src="/note.svg" />
       ) : (
         <div className="flex flex-wrap gap-4">
-          {templates.map((template, index) => (
+          {templates.map((template) => (
             <TemplateCard key={template.id} template={template} />
           ))}
         </div>

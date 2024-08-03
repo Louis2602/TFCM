@@ -1,7 +1,7 @@
-import Editor from '@/app/(dashboard)/templates/components/TemplateEditor';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import React from 'react';
+import Editor from "@/app/(main)/(user)/templates/components/TemplateEditor";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import React from "react";
 
 const CreateTemplate = () => {
   return (

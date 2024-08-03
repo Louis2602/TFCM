@@ -69,3 +69,38 @@ export const dashboardConfig: DashboardConfig = {
     },
   ],
 };
+
+export const adminDashboardConfig: DashboardConfig = {
+  nav: [
+    {
+      title: "Services",
+      links: [
+        {
+          icon: "dashboard",
+          label: "Dashboard",
+          href: "/admin/dashboard",
+        },
+        {
+          icon: "user",
+          label: "Users",
+          href: "/admin/dashboard/users",
+        },
+        {
+          icon: "template",
+          label: "Posts",
+          href: "/admin/dashboard/posts",
+        },
+      ],
+    },
+    {
+      title: "Account",
+      links: [
+        {
+          icon: "settings",
+          label: "Settings",
+          href: "/admin/dashboard/settings",
+        },
+      ],
+    },
+  ],
+};

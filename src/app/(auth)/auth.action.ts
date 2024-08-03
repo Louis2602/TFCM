@@ -65,7 +65,7 @@ export const signIn = async (values: z.infer<typeof signInSchema>) => {
     sessionCookie.attributes,
   );
 
-  return { success: true };
+  return { success: true, isAdmin: user.role === "admin" };
 };
 
 export const signOut = async () => {
