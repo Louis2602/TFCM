@@ -68,3 +68,26 @@ export async function getContentById(id: string) {
     };
   }
 }
+
+export async function getAllContent() {
+  try {
+    const user = await getCurrentUser();
+
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    const userDocuments = await db.select().from(content);
+
+    return {
+      success: true,
+      data: userDocuments,
+      message: `Content fetched successfully`,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: `Something went wrong: ${error.message}`,
+    };
+  }
+}

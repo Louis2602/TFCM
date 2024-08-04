@@ -1,21 +1,26 @@
-"use client";
-
-import { Text } from "lucide-react";
 import { Heading } from "@/components/global/heading";
-// import { useAccounts } from "@/server/brand/query";
+import { Text } from "lucide-react";
+import { PostTable } from "@/components/tables/post/table";
+import { getAllContent } from "@/lib/actions/content/query";
+import { columns } from "@/components/tables/post/column";
 
-const PostsPage = () => {
-  // const { data: users } = useAccounts();
-  // const totalPosts = users ? users.length : 0;
-  const totalPosts = 0;
+const PostsPage = async () => {
+  const response = await getAllContent();
+  const posts = response.success ? response.data : [];
+  const totalUsers = posts?.length;
+
+  if (posts === undefined) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div>
+    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <Heading
-        title={`Posts (${totalPosts})`}
+        title={`Posts (${totalUsers})`}
         description="Manage all posts created by collaborators."
         icon={Text}
       />
-      {/* <UsersTable column={column} data={users || []} /> */}
+      <PostTable columns={columns} data={posts} />
     </div>
   );
 };
