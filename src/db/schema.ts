@@ -69,6 +69,12 @@ export const prompt = pgTable(
 
 export const stateEnum = pgEnum("state", ["private", "public"]);
 
+export const reviewedStatus = pgEnum("status", [
+  "pending",
+  "accepted",
+  "declined",
+]);
+
 export const content = pgTable(
   "content",
   {
@@ -84,11 +90,16 @@ export const content = pgTable(
       () => category.id,
     ),
     state: stateEnum("state").default("private").notNull(),
+    status: reviewedStatus("status").default("pending").notNull(),
+    reviewComment: text("review_comment"),
+    reviewedAt: timestamp("reviewed_at"),
+    reviewedBy: text("reviewed_by").references(() => user.id),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
   (content) => ({
     userIdIdx: index("content_user_id_idx").on(content.userId),
+    reviewedByIdx: index("content_reviewed_by_idx").on(content.reviewedBy),
   }),
 );
 
