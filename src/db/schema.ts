@@ -29,7 +29,7 @@ export const user = pgTable(
   },
   (user) => ({
     emailIdx: index("email_idx").on(user.email),
-  }),
+  })
 );
 
 export const session = pgTable("session", {
@@ -64,7 +64,7 @@ export const prompt = pgTable(
   },
   (prompt) => ({
     userIdIdx: index("prompt_user_id_idx").on(prompt.userId),
-  }),
+  })
 );
 
 export const stateEnum = pgEnum("state", ["private", "public"]);
@@ -87,7 +87,7 @@ export const content = pgTable(
     outline: text("outline"),
     seoKeyword: text("seo_keyword"),
     categoryId: varchar("category_id", { length: 191 }).references(
-      () => category.id,
+      () => category.id
     ),
     state: stateEnum("state").default("private").notNull(),
     status: reviewedStatus("status").default("pending").notNull(),
@@ -100,7 +100,7 @@ export const content = pgTable(
   (content) => ({
     userIdIdx: index("content_user_id_idx").on(content.userId),
     reviewedByIdx: index("content_reviewed_by_idx").on(content.reviewedBy),
-  }),
+  })
 );
 
 export const category = pgTable(
@@ -116,7 +116,24 @@ export const category = pgTable(
   },
   (category) => ({
     userIdIdx: index("category_user_id_idx").on(category.userId),
-  }),
+  })
+);
+
+export const trending = pgTable(
+  "seo-wizard",
+  {
+    id: varchar("id", { length: 191 }).notNull().primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    title: text("title").notNull(),
+    used: integer("used").notNull().default(0),
+    category: text("category").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (trending) => ({
+    userIdIdx: index("trending_user_id_idx").on(trending.userId),
+  })
 );
 
 export const template = pgTable(
@@ -132,7 +149,7 @@ export const template = pgTable(
   },
   (template) => ({
     userIdIdx: index("template_user_id_idx").on(template.userId),
-  }),
+  })
 );
 
 export const kanban = pgTable("task_board", {
