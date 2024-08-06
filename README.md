@@ -22,14 +22,7 @@ pnpm dev
 bun dev
 ```
 
-Run the ngrok server to run webhook for login:
-
-```bash
-ngrok http 3000 --domain safely-brave-lynx.ngrok-free.app
-```
-
 Note that this ngrok server is free, so that it can only be run by 1 person.
-Try to create your account first, then it won't be needed to run ngrok server
 
 If you want to create any new schemas for the database, create it in `src/db/schema.ts`
 
@@ -47,13 +40,17 @@ Push migration script:
 npm run push
 ```
 
-Run Drizzle Studio to view the database:
+Run `Drizzle Studio` to view the database:
 
 ```bash
 npm run studio
 ```
 
 For more commands, take a look in `package.json` file and in the drizzle-orm documentation pages.
+
+## Testing
+
+For unit tests, we use `jest`. Put all your unit tests code into the folder: `/tests`
 
 ## Deployment Guide
 
@@ -120,23 +117,26 @@ Your code needs to be in a Git repository on GitHub, GitLab, or Bitbucket.
 NODE_ENV=development
 
 # OpenAI
-OPENAI_API_KEY=
-# UploadThing
-UPLOADTHING_SECRET=
-UPLOADTHING_APP_ID=
+OPENAI_API_KEY=sk-proj-example
 
 # App URL
 APP_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
-POSTGRES_URL=
+POSTGRES_URL=example
 
 # Stripe
-STRIPE_API_KEY=
-STRIPE_WEBHOOK_SECRET=
-STRIPE_PLAN_100=
-STRIPE_PLAN_200=
-STRIPE_PLAN_350=
-STRIPE_PLAN_500=
+STRIPE_API_KEY=example
+STRIPE_WEBHOOK_SECRET=example
+STRIPE_PLAN_100=example
+STRIPE_PLAN_200=example
+STRIPE_PLAN_350=example
+STRIPE_PLAN_500=example
+
+BLOB_READ_WRITE_TOKEN="vercel_blob_example"
+
+GOOGLE_TRENDS_REALTIME_URL="https://serpapi.com/search.json"
+GOOGLE_TRENDS_API_KEY=example
 ```
 
 ### Step 4: Deploy Your Next.js App
