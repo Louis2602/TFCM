@@ -52,14 +52,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   };
   return (
     <>
-      <ResponsiveDialog
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        title="Review content of collaborators"
-        description="Choose the final status for this content"
-      >
-        <ContentReviewStatus initialStatus={data.status!} contentId={data.id} />
-      </ResponsiveDialog>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -74,16 +66,24 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               <Eye className="h-4 w-4" /> View
             </div>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <div
-              className="flex transition-all hover:bg-muted items-center gap-2 w-full rounded-md"
-              onClick={() => {
-                setIsOpen(true);
-              }}
+
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <ResponsiveDialog
+              title="Review content of collaborators"
+              description="Choose the final status for this content"
+              trigger={
+                <div className="flex transition-all hover:bg-muted items-center gap-2 w-full rounded-md">
+                  <CheckCheck className="h-4 w-4" /> Review
+                </div>
+              }
             >
-              <CheckCheck className="h-4 w-4" /> Review
-            </div>
+              <ContentReviewStatus
+                initialStatus={data.status!}
+                contentId={data.id}
+              />
+            </ResponsiveDialog>
           </DropdownMenuItem>
+          
           <ConfirmModal
             header="Delete this content?"
             description="This will delete this content completely"
