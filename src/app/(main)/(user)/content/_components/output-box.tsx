@@ -82,11 +82,12 @@ export const OutputBox = () => {
 
   const onSave = async () => {
     const fileContent = content.markdown;
+    const outline = content.outlines;
 
     if (!fileContent) {
       return toast.info("Nothing to save");
     }
-    const { success, message } = await save(fileContent);
+    const { success, message } = await save(fileContent, outline);
     if (!success) {
       toast.error("Oops, an error has occured", {
         description: message,
