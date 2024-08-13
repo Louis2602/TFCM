@@ -8,7 +8,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 
-export async function save(body: string) {
+export async function save(body: string, outline?: string[]) {
   try {
     const user = await getCurrentUser();
 
@@ -30,7 +30,8 @@ Write a short, concise title that represents the content of the article. Return 
       id: createId(),
       userId: user.id,
       title: text,
-      body,
+      body: body,
+      outline: outline?.join(", "),
     });
 
     revalidatePath(`/content-writer`);
