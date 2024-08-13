@@ -40,6 +40,11 @@ export const dashboardConfig: DashboardConfig = {
           label: "Task board",
           href: "/kanban",
         },
+        {
+          icon: "kanban",
+          label: "Task board",
+          href: "/kanban",
+        },
       ],
     },
     {

@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 export type ContentState = {
+  outlines: string[];
   markdown: string;
   showContent: boolean;
 };
@@ -13,12 +14,14 @@ interface AppState {
 
 const defaultValues: AppState = {
   content: {
+    outlines: [],
     markdown: "",
     showContent: false,
   },
 };
 
 interface AppActions {
+  setOutlines: (value: string[]) => void;
   setMarkdown: (value: string | ((prev: string) => string)) => void;
   setShowContent: (value: boolean) => void;
 }
@@ -27,6 +30,11 @@ const useAppStore = create<AppState & AppActions>()(
   persist(
     immer((set) => ({
       ...defaultValues,
+      setOutlines: (value: string[]) => {
+        set((state) => {
+          state.content.outlines = value;
+        });
+      },
       setMarkdown: (value: string | ((prev: string) => string)) => {
         set((state) => {
           if (typeof value === "string") {

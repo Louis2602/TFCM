@@ -52,7 +52,7 @@ const getOutlinesWithValue = (outlines: Outline): string[] => {
 };
 
 export const ContentGenerator = () => {
-  const { setMarkdown } = useAppStore();
+  const { setMarkdown, setOutlines } = useAppStore();
   const [price, setPrice] = useState(0);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
@@ -148,6 +148,7 @@ ${resources}`;
     }
 
     const outlines = getOutlinesWithValue(formData.outline);
+    setOutlines(outlines);
 
     prompts += `\
 -------------------------
@@ -156,7 +157,7 @@ You are writing the article with the title of "${
     }" and the SEO keywords are "${formData.keywords}", in a ${
       formData.tone
     } writing tone. First, write an intro for this article and then, write detailed content for each of these outlines: ${outlines.join(
-      ", "
+      ", ",
     )}
 `;
 
