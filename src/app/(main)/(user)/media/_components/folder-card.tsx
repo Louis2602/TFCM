@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Icons } from '@/components/global/icons';
-import { CategoryForm } from './category-form';
+import { FolderForm } from './folder-form';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -10,13 +10,13 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Ellipsis, Folder, Trash2 } from 'lucide-react';
+import { Ellipsis, Folder as FolderIcon, Trash2 } from 'lucide-react';
 import { ConfirmDialog } from '@/components/global/confirm-dialog';
-import { Category } from '@/types/db';
+import { Folder } from '@/types/db';
 
-interface CategoryCardProps {
+interface FolderCardProps {
 	onClick: () => void;
-	data: Category;
+	data: Folder;
 	isSelected?: boolean;
 	editFunction?: {
 		onDelete: (id: string) => void;
@@ -24,7 +24,7 @@ interface CategoryCardProps {
 	};
 }
 
-const CategoryCard = (props: CategoryCardProps) => {
+const FolderCard = (props: FolderCardProps) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [isDeleteDialog, setIsDeleteDialog] = useState(false);
 	const [isUpdateForm, setIsUpdateForm] = useState(false);
@@ -38,7 +38,7 @@ const CategoryCard = (props: CategoryCardProps) => {
 					className="flex flex-row items-center"
 					onClick={props.onClick}
 				>
-					<Folder />
+					<FolderIcon />
 				</div>
 
 				<div
@@ -65,7 +65,7 @@ const CategoryCard = (props: CategoryCardProps) => {
 								}}
 							>
 								<Ellipsis />
-								<span className="sr-only">Edit category</span>
+								<span className="sr-only">Edit folder</span>
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">
@@ -100,7 +100,7 @@ const CategoryCard = (props: CategoryCardProps) => {
 
 			{f && (
 				<>
-					<CategoryForm
+					<FolderForm
 						open={isUpdateForm && !isDropdownOpen}
 						onOpenChange={(open) => {
 							setIsUpdateForm(open);
@@ -139,4 +139,4 @@ const CategoryCard = (props: CategoryCardProps) => {
 	);
 };
 
-export default CategoryCard;
+export default FolderCard;

@@ -16,7 +16,7 @@ export const onUpload = (file: File) => {
       promise.then(async (res) => {
         // Successfully uploaded image
         if (res.status === 200) {
-          const { url } = (await res.json()) as any;
+          const { url } = (await res.json());
           // preload the image
           let image = new Image();
           image.src = url;

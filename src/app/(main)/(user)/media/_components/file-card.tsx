@@ -3,36 +3,37 @@
 import { useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import type { Category, Content } from '@/types/db';
+import type { Folder, File } from '@/types/db';
 
 import ShareButton from './share-button';
 import Link from 'next/link';
 
-import { DocumentMoveDialog } from './document-move-dialog';
+import { FileMoveDialog } from './file-move-dialog';
 import { ConfirmDialog } from '@/components/global/confirm-dialog';
-import { RenameContentForm } from './rename-form';
+import { RenameFileForm } from './rename-form';
+
+import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
 	DropdownMenuContent,
-	DropdownMenuItem
+	DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 
-import { Button } from '@/components/ui/button';
 
+import { Ellipsis, File as FileIcon, Share2 } from 'lucide-react';
 import { Icons } from '@/components/global/icons';
-import { Ellipsis, File, Share2 } from 'lucide-react';
 
-interface DocumentCardProps {
+interface FileCardProps {
 	onDelete: (id: string) => void;
 	onRename: (id: string, name: string) => void;
-	onMoveToCategory: (content: Content, category: Category) => void;
-	onDeleteCategory: (content: Content) => void;
-	data: Content;
-	categories: Category[];
+	onMoveToFolder: (file: File, folder: Folder) => void;
+	onDeleteFolder: (file: File) => void;
+	data: File;
+	folders: Folder[];
 }
 
-const DocumentCard = (props: DocumentCardProps) => {
+const FileCard = (props: FileCardProps) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [moveDropdown, setMoveDropdown] = useState(false);
 	const [deleteDialog, setDeleteDialog] = useState(false);
@@ -44,11 +45,11 @@ const DocumentCard = (props: DocumentCardProps) => {
 	return (
 		<div className="last:border-0 border-b grid grid-cols-[3rem_auto_2rem] sm:grid-cols-[3rem_auto_10rem_2rem] px-4 py-2">
 			<div className="flex flex-col justify-center">
-				<File />
+				<FileIcon />
 			</div>
 
 			<div className="flex flex-col justify-center truncate hover:text-primary transition-colors">
-				<Link href={`/dashboard/archive/${data.id}`}>{data.title}</Link>
+				<Link href={`/media/${data.id}`}>{data.name}</Link>
 			</div>
 
 			<div className="hidden sm:flex flex-col justify-center">
@@ -67,7 +68,7 @@ const DocumentCard = (props: DocumentCardProps) => {
 						}}
 					>
 						<Ellipsis />
-						<span className="sr-only">Edit content</span>
+						<span className="sr-only">Edit file</span>
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
@@ -107,40 +108,35 @@ const DocumentCard = (props: DocumentCardProps) => {
 				</DropdownMenuContent>
 			</DropdownMenu>
 
-			<RenameContentForm
-				currentName={props.data.title}
+			<RenameFileForm
+				currentName={props.data.name}
 				open={renameDialog && !isDropdownOpen}
 				onOpenChange={setRenameDialog}
 				onSubmit={(values) => {
 					props.onRename(props.data.id, values.name);
 				}}
 			/>
-			<DocumentMoveDialog
-				document={props.data}
-				categories={props.categories}
+			<FileMoveDialog
+				file={props.data}
+				folders={props.folders}
 				open={moveDropdown && !isDropdownOpen}
 				onOpenChange={setMoveDropdown}
-				onMoveToCategory={props.onMoveToCategory}
-				onDeleteCategory={props.onDeleteCategory}
+				onMoveToFolder={props.onMoveToFolder}
+				onDeleteFolder={props.onDeleteFolder}
 			/>
 			<ConfirmDialog
-				title={''}
+				title="Delete File?"
 				open={deleteDialog && !isDropdownOpen}
 				onOpenChange={setDeleteDialog}
 				onConfirm={() => props.onDelete(props.data.id)}
-			/>
-			<ShareButton
-				open={shareDialog && !isDropdownOpen}
-				onOpenChange={setShareDialog}
-				contentId={data.id}
 			/>
 		</div>
 	);
 };
 
-export default DocumentCard;
+export default FileCard;
 
-DocumentCard.Skeleton = function DocumentCardSkeleton() {
+FileCard.Skeleton = function DocumentCardSkeleton() {
 	return (
 		<div className="aspect-[600/400] rounded-lg overflow-hidden">
 			<Skeleton className="h-full w-full" />

@@ -1,3 +1,5 @@
+import { MediaCollection } from './_components/media-collection';
+
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,6 +15,7 @@ export default function MediaPage() {
         <p className="text-muted-foreground">
           Managing your media for content creation.
         </p>
+        <MediaCollection />
       </div>
     </>
   );
