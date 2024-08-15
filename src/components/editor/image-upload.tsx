@@ -1,6 +1,5 @@
 import { createImageUpload } from "novel/plugins";
 import { toast } from "sonner";
-import { UploadAPIReturn } from "@/app/api/upload/route";
 
 export const onUpload = (file: File) => {
   const promise = fetch("/api/upload", {
@@ -17,7 +16,7 @@ export const onUpload = (file: File) => {
       promise.then(async (res) => {
         // Successfully uploaded image
         if (res.status === 200) {
-          const { url } = (await res.json()) as UploadAPIReturn;
+          const { url } = (await res.json());
           // preload the image
           let image = new Image();
           image.src = url;
