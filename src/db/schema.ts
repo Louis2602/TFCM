@@ -136,6 +136,48 @@ export const trending = pgTable(
   })
 );
 
+export const file = pgTable(
+	'file',
+	{
+		id: varchar('id', { length: 191 }).notNull().primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => user.id),
+		name: text('name').notNull(),
+		description: text('description'),
+		url: text('url').notNull(),
+    type: text('type').notNull(),
+		folderId: varchar('folder_id', { length: 191 }).references(
+			() => folder.id
+		),
+		createdAt: timestamp('created_at').notNull().defaultNow(),
+		updatedAt: timestamp('updated_at').notNull().defaultNow(),
+	},
+	(content) => ({
+		userIdIdx: index('file_user_id_idx').on(content.userId),
+	})
+);
+
+export const folder = pgTable(
+	'folder',
+	{
+		id: varchar('id', { length: 191 }).notNull().primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => user.id),
+		name: varchar('name', { length: 191 }).notNull(),
+		createdAt: timestamp('created_at', { mode: 'date' })
+			.notNull()
+			.defaultNow(),
+		updatedAt: timestamp('updated_at', { mode: 'date' })
+			.notNull()
+			.defaultNow(),
+	},
+	(folder) => ({
+		userIdIdx: index('folder_user_id_idx').on(folder.userId),
+	})
+);
+
 export const template = pgTable(
   "template",
   {

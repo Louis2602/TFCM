@@ -26,7 +26,8 @@ export const sleep = (ms: number) =>
 export const apiWrapper = <T extends ResponseData>(
 	f: () => Promise<T>,
 	onSuccess: (res: T) => void,
-	onError?: () => void
+	onError?: () => void,
+	errorMessage?: string
 ) => {
 	f()
 		.then((res) => {
@@ -34,11 +35,15 @@ export const apiWrapper = <T extends ResponseData>(
 				onSuccess(res);
 			} else {
 				if (onError) onError();
-				toast.error(res.error);
+				toast.error(
+					errorMessage ? errorMessage + ': ' + res.error : res.error
+				);
 			}
 		})
 		.catch((err) => {
 			if (onError) onError();
-			toast.error(err);
+			toast.error(
+				errorMessage ? errorMessage + ': ' + err : err
+			);
 		});
 };

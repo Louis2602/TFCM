@@ -2,17 +2,13 @@
 
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { Task } from '@/types/db';
-import { BoardSchema } from '@/lib/validations/kanban';
-
 import { useForm } from 'react-hook-form';
+
+import { CategorySchema } from '@/lib/validations/archive';
 
 import { Button, IconButton } from '@/components/ui/button';
 import { Icons } from '@/components/global/icons';
 import { Input } from '@/components/ui/input';
-
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 
 import {
 	Form,
@@ -25,7 +21,6 @@ import {
 
 import {
 	Dialog,
-	DialogTrigger,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
@@ -33,22 +28,20 @@ import {
 	DialogFooter,
 } from '@/components/ui/dialog';
 
+type FormData = z.infer<typeof CategorySchema>;
 
-type FormData = z.infer<typeof BoardSchema>;
-
-export type BoardFormProps = {
-	name?: string;
-	type: 'Create' | 'Update';
+export type RenameFileProps = {
+	currentName: string;
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	onSubmit: (values: FormData) => void;
 };
 
-export const BoardForm = (props: BoardFormProps) => {
+export const RenameFileForm = (props: RenameFileProps) => {
 	const form = useForm<FormData>({
-		resolver: zodResolver(BoardSchema),
+		resolver: zodResolver(CategorySchema),
 		defaultValues: {
-			name: props.name
+			name: props.currentName,
 		},
 	});
 
@@ -56,27 +49,21 @@ export const BoardForm = (props: BoardFormProps) => {
 		<Dialog open={props.open} onOpenChange={props.onOpenChange}>
 			<DialogContent className="max-w-lg">
 				<DialogHeader>
-					<DialogTitle>
-						{props.type} Board
-					</DialogTitle>
+					<DialogTitle>Rename File</DialogTitle>
 				</DialogHeader>
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(props.onSubmit)}
-						className="flex flex-col gap-6 px-4 py-2 rounded-lg"
+						className="flex flex-col gap-6 px-4 py-2"
 					>
 						<FormField
 							control={form.control}
 							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Board name</FormLabel>
+									<FormLabel>Rename file</FormLabel>
 									<FormControl>
-										<Input
-											placeholder=""
-											type="text"
-											{...field}
-										/>
+										<Input type="text" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -84,7 +71,7 @@ export const BoardForm = (props: BoardFormProps) => {
 						/>
 						<DialogFooter>
 							<DialogClose className="mx-6">Cancel</DialogClose>
-							<Button>{props.type}</Button>
+							<Button>Rename</Button>
 						</DialogFooter>
 					</form>
 				</Form>
