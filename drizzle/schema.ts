@@ -25,6 +25,19 @@ export const user = pgTable("user", {
 	}
 });
 
+export const folder = pgTable("folder", {
+	id: varchar("id", { length: 191 }).primaryKey().notNull(),
+	user_id: text("user_id").notNull().references(() => user.id),
+	name: varchar("name", { length: 191 }).notNull(),
+	created_at: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	updated_at: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
+},
+(table) => {
+	return {
+		user_id_idx: index("folder_user_id_idx").on(table.user_id),
+	}
+});
+
 export const category = pgTable("category", {
 	id: varchar("id", { length: 191 }).primaryKey().notNull(),
 	user_id: text("user_id").notNull().references(() => user.id),
@@ -61,13 +74,35 @@ export const kanban_task = pgTable("kanban_task", {
 	description: text("description"),
 });
 
-export const seo-wizard = pgTable("seo-wizard", {
+export const seo_wizard = pgTable("seo-wizard", {
 	id: varchar("id", { length: 191 }).primaryKey().notNull(),
 	user_id: text("user_id").notNull().references(() => user.id),
 	title: text("title").notNull(),
 	used: integer("used").default(0).notNull(),
 	category: text("category").notNull(),
 	created_at: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+},
+(table) => {
+	return {
+		trending_user_id_idx: index("trending_user_id_idx").on(table.user_id),
+	}
+});
+
+export const file = pgTable("file", {
+	id: varchar("id", { length: 191 }).primaryKey().notNull(),
+	user_id: text("user_id").notNull().references(() => user.id),
+	name: text("name").notNull(),
+	description: text("description"),
+	url: text("url").notNull(),
+	folder_id: varchar("folder_id", { length: 191 }).references(() => folder.id),
+	created_at: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	updated_at: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
+	type: text("type").notNull(),
+},
+(table) => {
+	return {
+		user_id_idx: index("file_user_id_idx").on(table.user_id),
+	}
 });
 
 export const content = pgTable("content", {
@@ -79,7 +114,7 @@ export const content = pgTable("content", {
 	state: state("state").default('private').notNull(),
 	outline: text("outline"),
 	seo_keyword: text("seo_keyword"),
-	category_id: varchar("category_id", { length: 191 }),
+	category_id: varchar("category_id", { length: 191 }).references(() => category.id),
 	updated_at: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 	status: status("status").default('pending').notNull(),
 	review_comment: text("review_comment"),
@@ -91,42 +126,6 @@ export const content = pgTable("content", {
 		user_id_idx: index("content_user_id_idx").on(table.user_id),
 		reviewed_by_idx: index("content_reviewed_by_idx").on(table.reviewed_by),
 	}
-});
-
-export const category = pgTable("category", {
-	id: varchar("id", { length: 191 }).primaryKey().notNull(),
-	user_id: text("user_id").notNull().references(() => user.id),
-	name: varchar("name", { length: 191 }).notNull(),
-	created_at: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	updated_at: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
-},
-(table) => {
-	return {
-		user_id_idx: index("category_user_id_idx").on(table.user_id),
-	}
-});
-
-export const task_board = pgTable("task_board", {
-	id: varchar("id", { length: 191 }).primaryKey().notNull(),
-	user_id: text("user_id").notNull().references(() => user.id),
-	name: text("name").notNull(),
-});
-
-export const kanban_column = pgTable("kanban_column", {
-	id: varchar("id", { length: 191 }).primaryKey().notNull(),
-	board_id: text("board_id").notNull().references(() => task_board.id),
-	name: text("name").notNull(),
-	index: integer("index"),
-});
-
-export const kanban_task = pgTable("kanban_task", {
-	id: varchar("id", { length: 191 }).primaryKey().notNull(),
-	column_id: text("column_id").notNull().references(() => kanban_column.id),
-	board_id: text("board_id").notNull().references(() => task_board.id),
-	assignee: text("assignee").references(() => user.id),
-	name: text("name").notNull(),
-	description: text("description").notNull(),
-	index: integer("index"),
 });
 
 export const prompt = pgTable("prompt", {

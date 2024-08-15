@@ -1,18 +1,21 @@
 import { relations } from "drizzle-orm/relations";
-import { user, category, task_board, kanban_column, kanban_task, seo-wizard, content, prompt, session, template } from "./schema";
+import { user, folder, category, task_board, kanban_column, kanban_task, seo_wizard, file, content, prompt, session, template } from "./schema";
 
-export const categoryRelations = relations(category, ({one}) => ({
+export const folderRelations = relations(folder, ({one, many}) => ({
 	user: one(user, {
-		fields: [category.user_id],
+		fields: [folder.user_id],
 		references: [user.id]
 	}),
+	files: many(file),
 }));
 
 export const userRelations = relations(user, ({many}) => ({
+	folders: many(folder),
 	categories: many(category),
 	task_boards: many(task_board),
 	kanban_tasks: many(kanban_task),
-	seo-wizards: many(seo-wizard),
+	seo_wizards: many(seo_wizard),
+	files: many(file),
 	contents_user_id: many(content, {
 		relationName: "content_user_id_user_id"
 	}),
@@ -22,6 +25,14 @@ export const userRelations = relations(user, ({many}) => ({
 	prompts: many(prompt),
 	sessions: many(session),
 	templates: many(template),
+}));
+
+export const categoryRelations = relations(category, ({one, many}) => ({
+	user: one(user, {
+		fields: [category.user_id],
+		references: [user.id]
+	}),
+	contents: many(content),
 }));
 
 export const task_boardRelations = relations(task_board, ({one, many}) => ({
@@ -56,10 +67,21 @@ export const kanban_taskRelations = relations(kanban_task, ({one}) => ({
 	}),
 }));
 
-export const seo-wizardRelations = relations(seo-wizard, ({one}) => ({
+export const seo_wizardRelations = relations(seo_wizard, ({one}) => ({
 	user: one(user, {
-		fields: [seo-wizard.user_id],
+		fields: [seo_wizard.user_id],
 		references: [user.id]
+	}),
+}));
+
+export const fileRelations = relations(file, ({one}) => ({
+	user: one(user, {
+		fields: [file.user_id],
+		references: [user.id]
+	}),
+	folder: one(folder, {
+		fields: [file.folder_id],
+		references: [folder.id]
 	}),
 }));
 
@@ -73,6 +95,10 @@ export const contentRelations = relations(content, ({one}) => ({
 		fields: [content.reviewed_by],
 		references: [user.id],
 		relationName: "content_reviewed_by_user_id"
+	}),
+	category: one(category, {
+		fields: [content.category_id],
+		references: [category.id]
 	}),
 }));
 
