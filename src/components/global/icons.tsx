@@ -41,6 +41,7 @@ import {
   Link,
   User,
   LucideIcon,
+  Building2Icon,
 } from "lucide-react";
 
 export const Icons = {
@@ -82,6 +83,7 @@ export const Icons = {
   maximize: Maximize,
   ban: Ban,
   trash: Trash2,
+  workspace: Building2Icon,
   logo: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"

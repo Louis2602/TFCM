@@ -40,6 +40,11 @@ export const dashboardConfig: DashboardConfig = {
           label: "Task board",
           href: "/kanban",
         },
+        {
+          icon: "workspace",
+          label: "Workspace",
+          href: "/workspace",
+        },
       ],
     },
     {
