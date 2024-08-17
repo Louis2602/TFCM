@@ -7,7 +7,7 @@ import {
   getUserTrendingTags,
   getUserTrendingKeywords,
 } from "@/lib/actions/seo-wizard/query";
-import { save, update } from "@/lib/actions/seo-wizard/save";
+import { save } from "@/lib/actions/seo-wizard/save";
 
 interface RowData {
   id: number;
@@ -62,16 +62,12 @@ const TrendingHeader: React.FC<TrendingHeaderProps> = ({
       const existTrending = trendings.data?.find(
         (trending) => trending.title === row.title
       );
-      const action = existTrending ? update : save;
-
-      const { success, message } = await action(
-        row.title,
-        row.used,
-        row.category
-      );
-      if (!success) {
-        toast.error("Oops, an error has occurred", { description: message });
-        return;
+      if (!existTrending) {
+        const { success, message } = await save(row.title);
+        if (!success) {
+          toast.error("Oops, an error has occurred", { description: message });
+          return;
+        }
       }
     }
 
@@ -82,7 +78,7 @@ const TrendingHeader: React.FC<TrendingHeaderProps> = ({
 
   return (
     <section className="flex flex-col justify-between md:flex-row">
-      <h1 className="font-bold text-lg my-4">
+      <h1 className="font-heading font-bold text-2xl my-4">
         Trending {isTag ? "tags" : "keywords"}
       </h1>
       <section className="flex gap-4 my-4 justify-between md:justify-end">

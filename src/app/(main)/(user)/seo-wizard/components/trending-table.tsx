@@ -16,7 +16,7 @@ import {
   getUserTrendingTags,
   getUserTrendingKeywords,
 } from "@/lib/actions/seo-wizard/query";
-import { save, update } from "@/lib/actions/seo-wizard/save";
+import { save } from "@/lib/actions/seo-wizard/save";
 
 interface RowData {
   id: number;
@@ -101,21 +101,12 @@ const TrendingTable: React.FC<TrendingTableProps> = ({
       (trending) => trending.title === row.title
     );
 
-    if (
-      existTrending &&
-      existTrending.used === row.used &&
-      existTrending.category === row.category
-    ) {
+    if (existTrending) {
       toast.error(`This ${isTag ? "tag" : "keyword"} has already been saved`);
       return;
     }
 
-    const action = existTrending ? update : save;
-    const { success, message } = await action(
-      row.title,
-      row.used,
-      row.category
-    );
+    const { success, message } = await save(row.title);
 
     if (success) {
       toast.success(

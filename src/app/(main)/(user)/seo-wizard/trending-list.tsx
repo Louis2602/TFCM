@@ -1,9 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
+import { toast } from "sonner";
 import TrendingHeader from "./components/trending-header";
 import TrendingTable from "./components/trending-table";
 import TablePartition from "./components/table-partition";
+import getTrendingKeywords from "@/lib/actions/seo-wizard/get-trending-keywords";
+import getTrendingTags from "@/lib/actions/seo-wizard/get-trending-tags";
+import getTrendingsByFile from "@/lib/actions/seo-wizard/get-trendings-by-file";
 
 interface RowData {
   id: number;
@@ -20,29 +24,25 @@ const TrendingList: React.FC<{ isTag: boolean }> = ({ isTag }) => {
   const [searchMode, setSearchMode] = useState(true);
   const [sortMode, setSortMode] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      let result = [];
+
       try {
-        let i = 0;
-        const filePath = isTag
-          ? "/file/trending-tags.txt"
-          : "/file/trending-keywords.txt";
-        const response = await fetch(filePath);
-        const text = await response.text();
-        const data = text.split("\n").map((line) => {
-          const [title, used, category] = line.split("/");
-          return {
-            id: ++i,
-            title,
-            used: parseInt(used),
-            category,
-            checked: false,
-          };
-        });
-        setRows(data);
+        result = isTag ? await getTrendingTags() : await getTrendingKeywords();
+
+        if (result.length === 0) {
+          result = await getTrendingsByFile(isTag);
+        }
+
+        setRows(result);
       } catch (error) {
-        console.error("Error fetching the file:", error);
+        toast.error("Error fetching data");
+      } finally {
+        setLoading(false);
       }
     };
 
