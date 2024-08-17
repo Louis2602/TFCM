@@ -14,7 +14,8 @@
     "drop": "drizzle-kit drop",
     "check": "drizzle-kit check",
     "up": "drizzle-kit up",
-    "studio": "drizzle-kit studio"
+    "studio": "drizzle-kit studio",
+    "test": "jest"
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.31",
@@ -44,8 +45,8 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@t3-oss/env-nextjs": "^0.10.1",
-    "@uploadthing/react": "^6.7.2",
     "@tanstack/react-table": "^8.19.3",
+    "@uploadthing/react": "^6.7.2",
     "@vercel/blob": "^0.23.4",
     "@vercel/postgres": "^0.8.0",
     "ai": "^3.2.14",
@@ -103,6 +104,7 @@
     "@types/react-dom": "^18.3.0",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@types/recharts": "^1.8.29",
+    "dotenv": "^16.4.5",
     "drizzle-kit": "^0.21.4",
     "esbuild": "^0.21.5",
     "eslint": "^8.57.0",
@@ -112,6 +114,7 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "ts-jest": "^29.2.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }
 }
