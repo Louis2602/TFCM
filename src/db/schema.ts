@@ -127,8 +127,6 @@ export const trending = pgTable(
       .notNull()
       .references(() => user.id),
     title: text("title").notNull(),
-    used: integer("used").notNull().default(0),
-    category: text("category").notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (trending) => ({

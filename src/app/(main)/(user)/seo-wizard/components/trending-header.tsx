@@ -82,7 +82,7 @@ const TrendingHeader: React.FC<TrendingHeaderProps> = ({
 
   return (
     <section className="flex flex-col justify-between md:flex-row">
-      <h1 className="font-bold text-lg my-4">
+      <h1 className="font-heading font-bold text-2xl my-4">
         Trending {isTag ? "tags" : "keywords"}
       </h1>
       <section className="flex gap-4 my-4 justify-between md:justify-end">
