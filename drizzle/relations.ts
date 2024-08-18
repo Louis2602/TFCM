@@ -1,5 +1,31 @@
 import { relations } from "drizzle-orm/relations";
-import { user, category, task_board, kanban_column, kanban_task, prompt, content, session, template } from "./schema";
+import { user, folder, category, task_board, kanban_column, kanban_task, seo_wizard, file, content, prompt, session, template } from "./schema";
+
+export const folderRelations = relations(folder, ({one, many}) => ({
+	user: one(user, {
+		fields: [folder.user_id],
+		references: [user.id]
+	}),
+	files: many(file),
+}));
+
+export const userRelations = relations(user, ({many}) => ({
+	folders: many(folder),
+	categories: many(category),
+	task_boards: many(task_board),
+	kanban_tasks: many(kanban_task),
+	seo_wizards: many(seo_wizard),
+	files: many(file),
+	contents_user_id: many(content, {
+		relationName: "content_user_id_user_id"
+	}),
+	contents_reviewed_by: many(content, {
+		relationName: "content_reviewed_by_user_id"
+	}),
+	prompts: many(prompt),
+	sessions: many(session),
+	templates: many(template),
+}));
 
 export const categoryRelations = relations(category, ({one, many}) => ({
 	user: one(user, {
@@ -7,16 +33,6 @@ export const categoryRelations = relations(category, ({one, many}) => ({
 		references: [user.id]
 	}),
 	contents: many(content),
-}));
-
-export const userRelations = relations(user, ({many}) => ({
-	categories: many(category),
-	task_boards: many(task_board),
-	kanban_tasks: many(kanban_task),
-	prompts: many(prompt),
-	contents: many(content),
-	sessions: many(session),
-	templates: many(template),
 }));
 
 export const task_boardRelations = relations(task_board, ({one, many}) => ({
@@ -51,21 +67,45 @@ export const kanban_taskRelations = relations(kanban_task, ({one}) => ({
 	}),
 }));
 
-export const promptRelations = relations(prompt, ({one}) => ({
+export const seo_wizardRelations = relations(seo_wizard, ({one}) => ({
 	user: one(user, {
-		fields: [prompt.user_id],
+		fields: [seo_wizard.user_id],
 		references: [user.id]
 	}),
 }));
 
-export const contentRelations = relations(content, ({one}) => ({
+export const fileRelations = relations(file, ({one}) => ({
 	user: one(user, {
-		fields: [content.user_id],
+		fields: [file.user_id],
 		references: [user.id]
+	}),
+	folder: one(folder, {
+		fields: [file.folder_id],
+		references: [folder.id]
+	}),
+}));
+
+export const contentRelations = relations(content, ({one}) => ({
+	user_user_id: one(user, {
+		fields: [content.user_id],
+		references: [user.id],
+		relationName: "content_user_id_user_id"
+	}),
+	user_reviewed_by: one(user, {
+		fields: [content.reviewed_by],
+		references: [user.id],
+		relationName: "content_reviewed_by_user_id"
 	}),
 	category: one(category, {
 		fields: [content.category_id],
 		references: [category.id]
+	}),
+}));
+
+export const promptRelations = relations(prompt, ({one}) => ({
+	user: one(user, {
+		fields: [prompt.user_id],
+		references: [user.id]
 	}),
 }));
 

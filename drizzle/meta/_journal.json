@@ -5,64 +5,43 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1716772319796,
-      "tag": "0000_burly_shotgun",
+      "when": 1722691333779,
+      "tag": "0000_chemical_strong_guy",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1716816725311,
-      "tag": "0001_colorful_thunderbolts",
+      "when": 1722779749032,
+      "tag": "0001_mighty_alex_wilder",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "6",
-      "when": 1719499834529,
-      "tag": "0002_first_typhoid_mary",
+      "when": 1722782407676,
+      "tag": "0002_complete_purifiers",
       "breakpoints": true
     },
     {
       "idx": 3,
       "version": "6",
-      "when": 1719500678165,
-      "tag": "0003_stale_lady_mastermind",
+      "when": 1722782850336,
+      "tag": "0003_plain_dark_beast",
       "breakpoints": true
     },
     {
       "idx": 4,
       "version": "6",
-      "when": 1719500761325,
-      "tag": "0004_solid_george_stacy",
+      "when": 1722934753475,
+      "tag": "0004_sloppy_carlie_cooper",
       "breakpoints": true
     },
     {
       "idx": 5,
       "version": "6",
-      "when": 1719505386409,
-      "tag": "0005_slippery_vance_astro",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1719505473978,
-      "tag": "0006_dapper_leech",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1721028468388,
-      "tag": "0007_gorgeous_gargoyle",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "6",
-      "when": 1721036053285,
-      "tag": "0008_optimal_living_tribunal",
+      "when": 1723880727711,
+      "tag": "0005_next_the_hood",
       "breakpoints": true
     }
   ]

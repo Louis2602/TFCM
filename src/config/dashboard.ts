@@ -40,6 +40,11 @@ export const dashboardConfig: DashboardConfig = {
           label: "Task board",
           href: "/kanban",
         },
+        {
+          icon: "workspace",
+          label: "Workspace",
+          href: "/workspace",
+        },
       ],
     },
     {
@@ -64,6 +69,41 @@ export const dashboardConfig: DashboardConfig = {
           icon: "receipt",
           label: "Credits",
           href: "/dashboard/credits",
+        },
+      ],
+    },
+  ],
+};
+
+export const adminDashboardConfig: DashboardConfig = {
+  nav: [
+    {
+      title: "Services",
+      links: [
+        {
+          icon: "dashboard",
+          label: "Dashboard",
+          href: "/admin/dashboard",
+        },
+        {
+          icon: "user",
+          label: "Users",
+          href: "/admin/dashboard/users",
+        },
+        {
+          icon: "template",
+          label: "Posts",
+          href: "/admin/dashboard/posts",
+        },
+      ],
+    },
+    {
+      title: "Account",
+      links: [
+        {
+          icon: "settings",
+          label: "Settings",
+          href: "/admin/dashboard/settings",
         },
       ],
     },

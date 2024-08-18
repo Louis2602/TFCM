@@ -2,7 +2,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { eq, sql } from "drizzle-orm";
 import { db } from "@/db/database";
 import { prompt, user } from "@/db/schema";
-import { CoreMessage, streamText, LanguageModel } from "ai";
+import { CoreMessage, streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { getCurrentUser } from "@/lib/lucia";
 
@@ -90,7 +90,7 @@ Write the content using the language that the user uses to give requirement.
     });
 
     const result = await streamText({
-      model: openai("gpt-3.5-turbo") as LanguageModel,
+      model: openai("gpt-3.5-turbo"),
       messages,
       temperature: 0.7,
       topP: 1,

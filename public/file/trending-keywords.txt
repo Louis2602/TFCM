@@ -1,0 +1,96 @@
+AI/5000000/Technology
+Metaverse/4800000/Technology
+Crypto/4700000/Finance
+NFT/4500000/Art
+Sustainability/4400000/Environment
+Blockchain/4200000/Technology
+5G/4100000/Technology
+Climate Change/4000000/Environment
+Mental Health/3900000/Health
+Remote Work/3800000/Healthcare
+DeFi/3700000/Finance
+IoT/3600000/Technology
+Augmented Reality/3500000/Technology
+Electric Vehicles/3400000/Transportation
+Digital Transformation/3300000/Technology
+Social Justice/3200000/Society
+Work-Life Balance/3100000/Healthcare
+E-Sports/3000000/Entertainment
+Fitness/2900000/Health
+Digital Currency/2800000/Finance
+Smart Homes/2700000/Technology
+Streaming/2600000/Entertainment
+Web3/2500000/Technology
+Data Privacy/2400000/Security
+Wearable Tech/2300000/Technology
+Diversity & Inclusion/2200000/Society
+Virtual Reality/2100000/Technology
+Gaming/2000000/Entertainment
+Sustainable Fashion/1900000/Environment
+Cryptocurrency/1800000/Finance
+Green Energy/1700000/Environment
+AI Ethics/1600000/Technology
+Health Tech/1500000/Health
+Smart Cities/1400000/Technology
+Tech Innovations/1300000/Technology
+Biohacking/1200000/Health
+Online Education/1100000/Education
+Blockchain Gaming/1000000/Entertainment
+Mental Wellness/900000/Health
+Clean Tech/800000/Environment
+Wearable Fitness/700000/Health
+Cybersecurity/600000/Security
+Quantum Computing/500000/Technology
+Home Automation/400000/Technology
+Telemedicine/300000/Health
+Biometrics/200000/Security
+EdTech/150000/Education
+Health Data/100000/Health
+Veganism/90000/Health
+Tech for Good/80000/Society
+Digital Nomads/70000/Work
+Personal Finance/60000/Finance
+Voice Assistants/50000/Technology
+Interactive Media/40000/Entertainment
+Fitness Apps/30000/Health
+Climate Action/20000/Environment
+Crowdfunding/10000/Finance
+Startup Culture/9000/Society
+Smart Wearables/8000/Technology
+Peer-to-Peer/7000/Finance
+Mobile Payments/6000/Finance
+Food Tech/5000/Technology
+Clean Eating/4000/Health
+Tech Trends/3000/Technology
+Alternative Medicine/2000/Health
+Urban Gardening/1000/Environment
+Art Tech/900/Art
+Fitness Technology/800/Health
+Smart Agriculture/700/Agriculture
+Mental Health Apps/600/Health
+Future of Work/500/Work
+Data Analytics/400/Technology
+Healthcare Innovations/300/Health
+Tech Startups/200/Technology
+Digital Art/100/Art
+Education Technology/900000/Education
+Online Learning/850000/Education
+E-Learning/800000/Education
+STEM/750000/Education
+Virtual Classrooms/700000/Education
+Education Reform/650000/Education
+Study Abroad/600000/Education
+Academic Research/550000/Education
+Student Success/500000/Education
+Teacher Training/450000/Education
+Physical Education/400000/Education
+Sports Tech/350000/Sports
+Athlete Health/300000/Sports
+Sports Analytics/250000/Sports
+Youth Sports/200000/Sports
+Fitness Training/150000/Sports
+Sports Medicine/100000/Sports
+Esports Training/90000/Sports
+Sports Management/80000/Sports
+Sports Nutrition/70000/Sports
+Virtual Sports/60000/Sports

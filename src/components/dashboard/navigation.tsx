@@ -23,7 +23,7 @@ export const Navigation = ({ onNavLinkClick }: NavigationProps) => {
   };
 
   return (
-    <div className="flex flex-col h-full justify-between">
+    <div className="flex flex-col h-full">
       <div className="flex flex-col gap-1">
         {dashboardConfig.nav.map((column) => (
           <nav key={column.title} className="flex flex-col gap-1">
