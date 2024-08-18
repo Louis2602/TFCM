@@ -1,24 +1,24 @@
 "use client";
 
-import { getMonthlyBudget } from "@/lib/actions/analytics/admin/budget";
+import { getMonthlyPostProgress } from "@/lib/actions/analytics/admin/post-progress";
 import { useEffect, useState } from "react";
 import {
-  Bar,
-  BarChart,
-  Legend,
+  Line,
+  LineChart,
   ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
+  Tooltip,
+  Legend,
 } from "recharts";
 
-export function BudgetChart() {
+export function PostProgressChart() {
   const [data, setData] = useState<any[] | undefined>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchData() {
-      const result = await getMonthlyBudget();
+      const result = await getMonthlyPostProgress();
       if (result.success) {
         setData(result.data);
       } else {
@@ -31,10 +31,9 @@ export function BudgetChart() {
   if (error) {
     return <div>Failed to get budget data: {error}</div>;
   }
-
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={data}>
+      <LineChart data={data}>
         <XAxis
           dataKey="name"
           stroke="#888888"
@@ -47,12 +46,18 @@ export function BudgetChart() {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `$${value.toFixed(2)}`}
+          tickFormatter={(value) => `${value}`}
         />
         <Tooltip />
         <Legend />
-        <Bar dataKey="total" fill="#1c1c1c" radius={[4, 4, 0, 0]} />
-      </BarChart>
+        <Line
+          type="monotone"
+          dataKey="total"
+          stroke="#1c1c1c"
+          strokeWidth={2}
+          dot={{ r: 4 }}
+        />
+      </LineChart>
     </ResponsiveContainer>
   );
 }
